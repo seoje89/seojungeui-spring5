@@ -8,17 +8,4 @@
 <schemaObject>9DFB148B-AF9C-978D-7BDE-7A69EED834AD</schemaObject>
 <defTableSpace>6F0F4CD5-3194-DD0E-9EC3-1687124DF32F</defTableSpace>
 <privileges>CREATE DIMENSION, CREATE MATERIALIZED VIEW, CREATE SEQUENCE, CREATE PROCEDURE, CREATE ANY CONTEXT, CREATE TYPE, CREATE SYNONYM, CREATE SESSION, CREATE JOB, CREATE VIEW, CREATE TABLE, CREATE OPERATOR, CREATE INDEXTYPE, CREATE TRIGGER, CREATE CLUSTER</privileges>
-<quotaItems>
-<QuotaItem class="oracle.dbtools.crest.model.design.storage.oracle.v10g.QuotaItemOraclev10g" name="QuotaItem1" id="C89F93DC-5BFF-0C00-C5C9-B2168DE54AFC">
-<createdBy>User</createdBy>
-<createdTime>2021-05-31 03:31:06 UTC</createdTime>
-<ownerDesignName>SPRING5</ownerDesignName>
-</QuotaItem>
-<QuotaItem class="oracle.dbtools.crest.model.design.storage.oracle.v10g.QuotaItemOraclev10g" name="QuotaItem2" id="6B626C0E-E8E0-936B-773A-9F5400729ACA">
-<createdBy>User</createdBy>
-<createdTime>2021-05-31 03:31:23 UTC</createdTime>
-<ownerDesignName>SPRING5</ownerDesignName>
-<tableSpace>6F0F4CD5-3194-DD0E-9EC3-1687124DF32F</tableSpace>
-</QuotaItem>
-</quotaItems>
 </UserOraclev10g>

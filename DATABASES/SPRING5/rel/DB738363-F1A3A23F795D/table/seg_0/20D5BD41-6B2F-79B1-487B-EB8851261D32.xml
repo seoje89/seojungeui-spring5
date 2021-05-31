@@ -1,0 +1,92 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="20D5BD41-6B2F-79B1-487B-EB8851261D32" schemaObject="9DFB148B-AF9C-978D-7BDE-7A69EED834AD" name="TBL_BOARD_TYPE">
+<sourceConnName>XE</sourceConnName>
+<sourceObjSchema>XE</sourceObjSchema>
+<sourceObjName>TBL_BOARD_TYPE</sourceObjName>
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 07:24:34 UTC</createdTime>
+<commentInRDBMS><![CDATA[게시판생성관리(NOTICE,GALLERY등등)]]></commentInRDBMS>
+<ownerDesignName>SPRING5</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="BOARD_TYPE" id="15C08738-E2A4-8A78-CF16-082EFA56CA37">
+<sourceConnName>XE</sourceConnName>
+<sourceObjSchema>TBL_BOARD_TYPE</sourceObjSchema>
+<sourceObjName>BOARD_TYPE</sourceObjName>
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 07:24:34 UTC</createdTime>
+<commentInRDBMS><![CDATA[게시판타입(NOTICE,GALLERY등)]]></commentInRDBMS>
+<ownerDesignName>SPRING5</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20 BYTE</dataTypeSize>
+<ownDataTypeParameters>20 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="BOARD_NAME" id="A5CBC3C7-3706-1EC4-0CFF-A763E674B71D">
+<sourceConnName>XE</sourceConnName>
+<sourceObjSchema>TBL_BOARD_TYPE</sourceObjSchema>
+<sourceObjName>BOARD_NAME</sourceObjName>
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 07:24:34 UTC</createdTime>
+<commentInRDBMS><![CDATA[한글게시판이름]]></commentInRDBMS>
+<ownerDesignName>SPRING5</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="BOARD_SUN" id="17256A26-73A7-432B-64EB-92B23F2CB15B">
+<sourceConnName>XE</sourceConnName>
+<sourceObjSchema>TBL_BOARD_TYPE</sourceObjSchema>
+<sourceObjName>BOARD_SUN</sourceObjName>
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 07:24:34 UTC</createdTime>
+<commentInRDBMS><![CDATA[게시판출력순서]]></commentInRDBMS>
+<ownerDesignName>SPRING5</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,11,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="D541DA36-0819-1782-394D-B59FDE6ED692" name="TBL_BOARD_TYPE_PK">
+<sourceConnName>XE</sourceConnName>
+<sourceObjSchema>XE</sourceObjSchema>
+<sourceObjName>TBL_BOARD_TYPE_PK</sourceObjName>
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 07:24:34 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="15C08738-E2A4-8A78-CF16-082EFA56CA37"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="A4A54053-B6EF-AE5E-C77B-198FDAE48F23" schemaObject="9DFB148B-AF9C-978D-7BDE-7A69EED834AD" name="TBL_BOARD_TYPE_PK">
+<sourceConnName>XE</sourceConnName>
+<sourceObjSchema>XE</sourceObjSchema>
+<sourceObjName>TBL_BOARD_TYPE_PK</sourceObjName>
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 07:24:34 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="15C08738-E2A4-8A78-CF16-082EFA56CA37"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

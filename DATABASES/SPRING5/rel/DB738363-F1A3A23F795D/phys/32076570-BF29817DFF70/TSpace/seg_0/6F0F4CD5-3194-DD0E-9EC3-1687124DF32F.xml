@@ -6,6 +6,12 @@
 <createdBy>User</createdBy>
 <createdTime>2021-05-31 03:31:07 UTC</createdTime>
 <ownerDesignName>SPRING5</ownerDesignName>
+<dsInitialExtent>65536</dsInitialExtent>
+<dsMaxExtents>2147483645</dsMaxExtents>
 <emUniformSize>0</emUniformSize>
 <extentManagement>LOCAL</extentManagement>
+<minExtLen>65536</minExtLen>
+<dsCompression>NOCOMPRESS</dsCompression>
+<encrypt>NO</encrypt>
+<fileType>SMALLFILE</fileType>
 </TableSpaceOraclev10g>
