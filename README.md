@@ -7,18 +7,25 @@
 - VS code에서 만든 UI를 이클립스 JSP로 변경 후 스프링 웹 프로젝트를 진행.
 - 관리자단 AdminLTE적용 - 스프링작업시 회원관리CRUD, 게시판생성관리CRUD : JSP로 작업
 
+#### 20210603(목) 작업예정
+- JUnit테스트: 오라클 연동한 후 회원관리 부분 CRUD테스트 진행예정
+- 오라클 CRUD 실습예정
+- admin 부터 프로그램 작업 시작예정.
+
 #### 20210602(수) 작업
 - Controller(클래스) + home/index.jsp(화면) 한쌍. 그래서 컨트롤러 클래스에서 만든 변수를 index.jsp에서 사용 가능하게 된다.
 - 안드로이드 앱 = 액티비티(java) + 레이아웃.xml(화면) 한쌍
 - C#닷넷 = .cs(프로그램) + test.aspx(화면) 한쌍
-- 일반홈페이지(cafe24)- URL 직접접근 가능(보안 낮음)
+- 일반홈페이지(cafe24)- URL 직접접근 가능(보안 낮음)	
 - MVC웹프로그램 차이점 - URL 직접접근 불가(보안 높음) - 관공서, 대학, 은행
 - MVC프로젝트에도 직접접근이 가능한 resources 폴더 존재 - static 콘텐츠(html,css,js)를 모아놓은 폴더. views폴더 jsp는 직접접근이 불가능
 - views 폴더처럼 직접접근이 불가능한 컨텐츠는 Controller(라우터)로 접근하게 됨.
 - views/home/index.jsp 엑박처리 후 분해(header.jsp, footer.jsp, index.jsp)
+- Junit(Java Unit Test): 자바 단위 테스트(서비스 프로그램 만들기 전 프로토 타입 시제품 제작) - Junit CRUD 작업 후 본격작업시작.
+- Logger의 레벨 : Debug > Info > Warn > Error > Fatal
+- 개발할때 : Debug 로거레벨을 설정
+- 납품할때 : Warn 로거레벨로 변경
 - 개발순서 : ERD제작 -> html제작 -> jsp제작(현재:관리자단 작업 후 사용자단)
-- admin 폴더 만든 이후 분해처리예정
-- admin 부터 프로그램 작업 시작예정.
 - 자바실습 4장 패키지와 예외 처리 실습.
 
 #### 20210601(화) 작업
