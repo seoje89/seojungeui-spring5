@@ -21,7 +21,7 @@
 - 1. @Controller,@Repository,@Service,@Component
 - 2. -context.xml에서 빈(bean)을 추가하면, 스프링 클래스가 됨.
 - JUnit테스트: 오라클 연동한 후 회원관리 부분 CRUD테스트 진행예정
-- 오라클 04장부터 CRUD 실습예정
+- 오라클 05장부터 CRUD 실습예정
 - admin 회원관리(jsp디자인)부터 프로그램 작업 시작예정.
 
 #### 20210602(수) 작업
