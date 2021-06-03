@@ -11,7 +11,15 @@
 - VS code에서 만든 UI를 이클립스 JSP로 변경 후 스프링 웹 프로젝트를 진행.
 - 관리자단 AdminLTE적용 - 스프링작업시 회원관리CRUD, 게시판생성관리CRUD : JSP로 작업
 
-#### 20210603(목) 작업예정
+#### 20210603(목) 작업
+- 작업시간(비중) = 관리자단 7:3 사용자단
+- 스프링에서 오라클연동 순서
+- 1. jdbc(Java DataBase Connection) 확장모듈 pom에 추가
+- 2. 오라클 접속 드라이버 확장 모듈을 pom에 추가X 직접 jar 파일을 추가
+- root-context.xml 파일에 오라클 커넥션 빈(스프링클래스)을 추가
+- 스프링이 관리하는 클래스를 추가하는 방법 2가지 
+- 1. @Controller,@Repository,@Service,@Component
+- 2. -context.xml에서 빈(bean)을 추가하면, 스프링 클래스가 됨.
 - JUnit테스트: 오라클 연동한 후 회원관리 부분 CRUD테스트 진행예정
 - 오라클 04장부터 CRUD 실습예정
 - admin 회원관리(jsp디자인)부터 프로그램 작업 시작예정.
