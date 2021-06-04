@@ -1,5 +1,24 @@
 --8장 함수(count, upper, lower, to_char, round..) 그룹함수
-SELECT ename, round(sal) FROM emp;
+--부서별 연봉의 합계를 구해서 제일 급여가 많이 지출되는 부서 찾기(아래)
+--자바코딩에서는 소문자로 통일
+--DB세팅에서 대소문자 구분해서 사용할지, 구분할지 않을지 세팅
+SELECT * FROM (
+SELECT deptno, SUM(sal) AS dept_sal 
+FROM emp GROUP BY deptno
+) R ORDER BY dept_sal DESC; -- R의 역할을 Alias 별명
+SELECT deptno, SUM(sal) FROM emp 
+GROUP BY deptno 
+ORDER BY SUM(sal) DESC;
+--라운드함수(반올림) 소수점기준. round(10.05,2) 소수점 2번째 자리서 반올림
+SELECT ename, round(sal,-3) FROM emp;
+SELECT SUM(sal) FROM emp; --한개의 레코드만, 그룹함수라고 말한다.
+SELECT round(AVG(sal)) FROM emp; --평균 한개의 레코드로 출력
+SELECT COUNT(*) FROM emp WHERE sal < (SELECT round(AVG(sal)) FROM emp);
+--위 쿼리는 사원중에 평균연봉보다 많이 받는 사람의 숫자
+--(error)위 avg함수를 where조건에 사용 못할때 서브쿼리를 이용한다.
+SELECT MAX(sal), MIN(sal)
+, MAX(sal) - MIN(sal) as "대표와 사원의 연봉차"
+FROM emp;
 --DDL문(create; alter; drop;), DCL문(commit; rollback;)
 --DML문(Data Manufacture Language) insert, update, delete
 --insert문: 테이블에 새로운 레코드(row)를 추가
