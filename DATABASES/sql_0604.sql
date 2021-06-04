@@ -1,4 +1,65 @@
---8장 함수(count, upper, lower, to_char, round..) 그룹함수
+-- 19장 사용자 추가(CreateWorkSpace)시 오라클데스크탑(옛날방식) 사용x
+-- 대신 웹프로그램 http://127.0.0.1:9000/apex/f?p=4950 사용
+-- SQL플러스x
+
+-- 15장 PK생성시 자동으로 발생되는 제약조건(constraint) :NOT NULL(빈값방지), UNIQUE(NO중복)
+-- INDEX(테이블)도 자동생성(검색
+-- ERD로 게시판테이블-[댓글|첨부파일] Foreign KEY(외래키) : 부자 관계에 생성
+
+-- 14장 트랜잭션 DB단에서 사용하지 않고, 스프링단에서 트랜잭션 사용 @Transactional 인터페이스를 사용
+-- commit과 rollback;(DML문:insert,update,delete)
+-- rollback 은 제일 마지막 커밋된 상태로 되돌린다.
+
+-- 12장 테이블 구조 생성(create;),변경(alter;),삭제(drop;)
+-- ERD 관계형 다이어그램으로 물리적 테이블 생성(포워드엔지니어링)
+DROP TABLE TBL_MEMBER_DEL;
+CREATE TABLE TBL_MEMBER_DEL
+(
+USER_ID VARCHAR(50) PRIMARY KEY,
+USER_PW VARCHAR(255),
+USER_NAME VARCHAR(255),
+EMAIL VARCHAR(255),
+POINT NUMBER(11),
+ENABLED NUMBER(1),
+LEVELS VARCHAR(255),
+LEG_DATE TIMESTAMP,
+UPDATE_DATE TIMESTAMP
+);
+-- ALTER TABLE로 필드명 변경(아래)
+ALTER TABLE tbl_member_del RENAME COLUMN email TO user_email;
+-- DEPT테이블의 deptno 숫자 2자리때문에 에러 -> 4자리로 크기를 변경
+DESC dept; -- 작은 자릿수에서 큰 자릿수로 변경하는건 문제 없음. 반대의 경우 에러 혹은 데이터가 깨짐(이미 큰자릿수가 존재할 확률이 있기 때문)
+ALTER TABLE dept MODIFY (deptno NUMBER(4));
+-- 11장 서브쿼리
+-- 단일행 서브쿼리 필드값을 비교할때, 비교하는 값이 단일한(필드값)
+-- 다중행 서브쿼리 테이블값을 select쿼리로 생성(레코드값)
+
+--10장 테이블 조인 2개 이상의 테이블을 연결해서 결과를 구하는 예약어
+--댓글 개수 구할때, 
+--카티시안프러덕트 조인(합집합-게시물10개,댓글100=110개~1000개)
+--(인너)조인을 제일 많이 사용(교집합)
+--오라클방식(아래)
+SELECT dept.dname, emp.* FROM emp, dept 
+WHERE emp.deptno = dept.deptno
+AND emp.ename = 'SCOTT';
+--표준(ANSI)쿼리방식(아래) inner 키워드 디폴트값
+SELECT d.dname, e.* FROM emp e JOIN dept d 
+ON e.deptno = d.deptno
+WHERE e.ename = 'SCOTT';
+-- 조인과 그룹을 이용해서 댓글카운터까지 출력하는 게시판 리스트 만들기
+SELECT bod.bno, title||'['||count(*)||']'
+,writer, bod.reg_date, view_count
+FROM tbl_board BOD
+INNER JOIN tbl_reply REP ON bod.bno=rep.bno
+GROUP BY bod.bno,title,writer,bod.reg_date,view_count
+ORDER BY bod.bno;
+--8장 함수(count, upper, lower, to_char, round..) 그룹함수번호
+--having은 group by의 조건문
+--부서별 평균 급여가 2천 이상인 부서의 번호와 부서별평균급여
+SELECT deptno, round(AVG(sal)) FROM emp
+--WHERE AVG(sal) >= 2000 --검색조건
+GROUP BY deptno 
+HAVING AVG(sal) >= 2000; -- 그룹조건
 --부서별 연봉의 합계를 구해서 제일 급여가 많이 지출되는 부서 찾기(아래)
 --자바코딩에서는 소문자로 통일
 --DB세팅에서 대소문자 구분해서 사용할지, 구분할지 않을지 세팅
