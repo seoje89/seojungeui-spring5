@@ -36,7 +36,14 @@ SELECT * FROM emp WHERE comm IS NULL;
 SELECT nvl2(comm,0,100), E.* FROM emp E WHERE NVL(comm ,0) = 0;
 -- NVL2(필드명, 널이 아닐때 100, 널일때 0), NVL(필드명, 널일때 0)
 -- 오라클은 표준쿼리x, ANSI쿼리 표준이다.
-SELECT DECODE(comm,null,0,100),NVL2(comm,100,0), E.* FROM emp E WHERE NVL(comm ,0) = 0;
+SELECT 
+CASE WHEN comm is null THEN 0
+WHEN comm = 0 THEN 100
+WHEN comm > 0 THEN comm
+END AS "CASE출력문"
+,DECODE(comm,null,0,100)
+,NVL2(comm,100,0)
+, E.* FROM emp E;-- WHERE NVL(comm ,0) = 0;
 -- 연봉을 기준으로 정렬 sort = 순서 order by 필드명 오름차순[초기값]|내림차순
 -- (중요)서브쿼리?(select 쿼리가 중복되어있는...)
 SELECT ROWNUM, E.* FROM ( -- 테이블명 대신 묶어줌
@@ -68,5 +75,5 @@ SELECT sysdate + 1 From dual;
 SELECT sysdate - 1 from dual;
 --6개월간 회원정보 수정이 없는 회원에게 공지서비스를 처리하는 용도
 SELECT * FROM
-tbl_member
+TBL_MEMBER
 WHERE update_date < add_months(sysdate, -6);
