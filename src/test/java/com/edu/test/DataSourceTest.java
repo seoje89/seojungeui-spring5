@@ -35,6 +35,15 @@ public class DataSourceTest {
 	DataSource dataSource; //인젝트로 객체를 만들면 객체의 메모리 관리를 스프링이 대신해준다.
 	//Inject는 자바8부터 지원, 자바7이하에서는 @Autowired로 객체를 만듬.
 	
+	//스프링 코딩 시작 순서
+	//M-V-C 사잉 데이터를 임시저장하는 공간(VO클래스-멤버변수+Get/Set메서드) 생성
+	//보통 ValueObject 클래스는 DB테이블과 1:1로 매칭이 된다.
+	//그래서 1. MemberVO.java VO클래스를 생성(필수)
+	//2. DB(마이바티스)쿼리를 생성.(VO사용됨)
+	@Test
+	public void selectMember() throws Exception {
+		//회원관리 테이블에서 더미로 입력한 100개의 레코드를 출력하는 메서드 테스트 -> 회원관리 목록이 출력
+	}
 	@Test
 	public void oldQueryTest() throws Exception {
 		//스프링을 사용하지 않을때 예전 방식: 코딩테스트에서는 스프링설정을 안쓰고, 직접 		DB 아이디/암호 입력
