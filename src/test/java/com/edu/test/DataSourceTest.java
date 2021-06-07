@@ -39,7 +39,7 @@ public class DataSourceTest {
 	public void oldQueryTest() throws Exception {
 		//스프링을 사용하지 않을때 예전 방식: 코딩테스트에서는 스프링설정을 안쓰고, 직접 		DB 아이디/암호 입력
 		Connection connection = null;
-		connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521/XE","XE","apmsetup");
+		connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521/XE","XE2","apmsetup");
 		logger.debug("데이터베이스 직접 접속이 성공했습니다. DB종류는"+ connection.getMetaData().getDatabaseProductName());
 		//직접 쿼리를 날린다. 날리기전 쿼리문자 statement
 		Statement stmt = connection.createStatement();
