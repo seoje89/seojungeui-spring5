@@ -11,7 +11,47 @@
 - VS code에서 만든 UI를 이클립스 JSP로 변경 후 스프링 웹 프로젝트를 진행.
 - 관리자단 AdminLTE적용 - 스프링작업시 회원관리CRUD, 게시판생성관리CRUD : JSP로 작업
 
-### 20210607(월) 작업
+#### 20210608(화) 작업
+- 페이징에 사용되는 변수(쿼리변수+VO변수)
+- queryStartNo, queryPerPageNum, page, perPageNum, startPage, endPage
+- 검색에 필요한 변수(쿼리변수만): 검색어(search_keyword), 검색조건(search_type)
+
+```
+--SQL쿼리로 페이징을 구현해서 변수로 삼을것을 정의
+--PageVO의 멤버변수로 사용예정
+SELECT TableB.* FROM
+(
+    SELECT ROWNUM AS RNUM, TableA. * FROM
+    (
+    SELECT * FROM tbl_member
+    WHERE user_id LIKE '%admin%'
+    OR user_name LIKE '%사용자8%'
+    ORDER BY reg_date DESC
+    ) TableA WHERE ROWNUM <= (page*b)+b
+) TableB WHERE TableB.RNUM > page*b
+--페이징쿼리에서 필요한 변수는 2개
+--현재페이지에 보여주는 변수 page*b == queryStartNo
+--1페이지당 보여주는 변수의 갯수 b == queryPerPageNum
+--PageVO에서 필요한 추가변수: page
+--UI하단의 페이지 선택 번호 출력할때 사용하는 변수(아래)
+--perPageNum 변수로 받아서 startPage, endPage 를 구해서 하단의 페이지 선택 번호를 출력
+```
+
+- 스프링코딩 작업순서 1부터 6까지(아래)
+- 1. ERD를 기준으로 VO클래스 생성
+- M-V-C 사이에 데이터를 입출력하는 임시저장 공간(VO클래스-멤버변수+GET/SET메서드)생성
+- 보통 ValueObject클래스는 DB테이블과 1:1로 매칭이 된다.
+- 2. 매퍼쿼리(마이바티스 사용)를 만든다.(VO사용해서 쿼리생성)
+- 3. DAO(데이터 엑세스 오브젝트)클래스를 생성(SqlSession 사용쿼리 실행) *오늘 Sql 세션은 root-context에 빈으로 만듬.
+- IF(인터페이스)를 만드는 목적: 복잡한 구현클래스를 간단하게 구조화 시켜서 개발자가 편하게 관리하게 도와주는 역할 -> 기사시험: 캡슐화 구현과 관련(안에 어떤 구현 내용이 존재하는지 몰라도, 이름만 보고 사용하게 만들어주는것)
+- 스프링 부트(간단한 프로젝트)에서는 4번 Service클래스 없이 바로 컨트롤러로 이동한다.
+- 4. Service(서비스)클래스 생성(서비스에 쿼리결과를 담아 놓는다.)
+- 게시물을 등록하는 서비스1개(tbl_board DAO1 + tbl_attach DAO2)
+- JUnit에서 위 작업한 내용을 CRUD 테스트
+- 5. Controller(컨트롤러)클래스생성(서비스 결과를 JSP로 보냄)
+- 6. JSP(View파일) 생성(컨트롤러의 Model 객체를 JSTL을 이용해 화면에 뿌려준다)
+
+#### 20210607(월) 작업
 - 마이바티스 추가 순서
 - 1. pom.xml에 의존성 추가
 - 2. 마이바티스 설정파일 추가(쿼리를 저장할 위치 지정, 파일명 지정)

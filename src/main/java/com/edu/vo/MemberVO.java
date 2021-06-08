@@ -20,7 +20,7 @@ public class MemberVO {
 	private String levels;
 	private Date reg_date;
 	private Date update_date;
-	//교과서에서는 롬복 loombok.jar 을 사용해서 아래 내용을 생략 가능
+	//교과서에서는 롬복 lombok.jar 을 사용해서 아래 내용을 생략 가능
 	//우리는 Get/Set을 만들어서 사용
 	public String getUser_id() {
 		return user_id;
