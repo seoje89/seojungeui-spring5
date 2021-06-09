@@ -19,6 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.edu.service.IF_MemberService;
 import com.edu.vo.MemberVO;
+import com.edu.vo.PageVO;
 
 /**
  * 이 클래스는 오라클과 연동해서 CRUD를 테스트하는 클래스
@@ -51,6 +52,15 @@ public class DataSourceTest {
 		//변수를 2~3이상은 바로 String 변수로 처리하지 않고, VO 만들어서 사용
 		//PageVO.java클래스를 만들어서 페이징처리변수와 검색어변수 선언, Get/Set생성
 		//PageVO 만들기전 SQL쿼리로 가상으로 페이지를 한번 구현해보면서, 필요한 변수 만들어야 함
+		//PageVO 객체를 만들어서 가상으로 초기값을 입력한다.(아래)
+		PageVO pageVO = new PageVO();
+		pageVO.setPage(1); //기본값으로 1페이지를 입력
+		pageVO.setPerPageNum(10); // UI하단사용 페이지 개수
+		pageVO.setQueryPerPageNum(10); // 쿼리사용 페이지당 개수
+		pageVO.setTotalCount(memberService.countMember()); //테스트하려고, 100명을 강제입력
+		pageVO.setSearch_keyword("admin");
+		//위 위치가 다른 설정보다 상단이면 에러발생 : 이유는 calcPage()가 실행시 위 3가지 변수값이 저장되어 있어야 계산메서드가 정상작동되기 때문
+		//위 토탈카운트 변수값은 startPage, endPage 계산에 필수이다.
 		List<MemberVO> listMember = memberService.selectMember();
 		listMember.toString();
 	}
