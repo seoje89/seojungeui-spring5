@@ -11,6 +11,13 @@
 - VS code에서 만든 UI를 이클립스 JSP로 변경 후 스프링 웹 프로젝트를 진행.
 - 관리자단 AdminLTE적용 - 스프링작업시 회원관리CRUD, 게시판생성관리CRUD : JSP로 작업
 
+#### 20210609(수) 작업
+- PageVO.java 클래스 생성 마무리
+- JUnit에서 위 작업한 내용을 기준으로 selectMember() 테스트 진행
+- <![CDATA[ 쿼리]]> : 태그 안쪽에 부등호를 사용하기 위해서 문자열 변환 태그를 사용
+- 쿼리에서 변수와 문자열과 연결할때는 +(자바) X, (X), ||
+- JUnit에서 회원관리 나머지 CRUD 테스트 진행
+
 #### 20210608(화) 작업
 - 페이징에 사용되는 변수(쿼리변수+VO변수)
 - queryStartNo, queryPerPageNum, page, perPageNum, startPage, endPage
