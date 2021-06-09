@@ -20,6 +20,13 @@ public class PageVO {
 	private String search_keyword; // jsp에서 받은 검색어 쿼리전용 변수
 	private String Search_type; // 검색조건에 해당되는 쿼리전용 변수
 	
+	@Override
+	public String toString() {
+		return "PageVO [queryStartNo=" + queryStartNo + ", queryPerPageNum=" + queryPerPageNum + ", page=" + page
+				+ ", perPageNum=" + perPageNum + ", totalCount=" + totalCount + ", startPage=" + startPage
+				+ ", endPage=" + endPage + ", prev=" + prev + ", next=" + next + ", search_keyword=" + search_keyword
+				+ ", Search_type=" + Search_type + "]";
+	}
 	public int getQueryStartNo() {
 		//this.page-1 하는 이유는 jsp에서는 1부터 시작하지만 쿼리에서는 0부터 사용되기 때문에 page*페이지당 보여줄 개수
 		queryStartNo = (this.page-1)*queryPerPageNum;

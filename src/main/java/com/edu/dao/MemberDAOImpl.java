@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.edu.vo.MemberVO;
+import com.edu.vo.PageVO;
 
 
 /**
@@ -23,9 +24,9 @@ public class MemberDAOImpl implements IF_MemberDAO {
 	private SqlSession sqlSession;
 	
 	@Override //부모 인터페이스의 메서드를 상속해서 재정의한다.
-	public List<MemberVO> selectMember() throws Exception {
+	public List<MemberVO> selectMember(PageVO pageVO) throws Exception {
 		// SqlSession의 메서드 이용해서 매퍼 쿼리를 사용
-		List<MemberVO> listMember = sqlSession.selectList("memberMapper.selectMember");
+		List<MemberVO> listMember = sqlSession.selectList("memberMapper.selectMember", pageVO);
 		return listMember;
 	}
 
