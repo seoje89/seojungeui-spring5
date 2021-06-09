@@ -42,6 +42,26 @@ public class DataSourceTest {
 	@Inject //MemberService 서비스를 주입받아서 객체를 사용(아래)
 	private IF_MemberService memberService;
 	
+	@Test
+	public void deleteMember() throws Exception {
+		memberService.deleteMember("user_del");
+		selectMember();
+	}
+	@Test
+	public void insertMember() throws Exception {
+		MemberVO memberVO = new MemberVO();
+		//인서트 쿼리에 저장할 객체 생성
+		memberVO.setUser_id("user_del");
+		memberVO.setUser_pw("1234");//스프링시큐리티 중 512비트 암호화로 처리예정
+		memberVO.setEmail("user@test.com");
+		memberVO.setPoint(10);
+		memberVO.setEnabled(true);
+		memberVO.setLevels("ROLE_USER");
+		memberVO.setUser_name("삭제할 사용자");
+		memberService.insertMember(memberVO);
+		selectMember();
+	}
+	
 	//스프링 코딩 시작 순서(Readme로 이동)
 
 	@Test
@@ -61,7 +81,7 @@ public class DataSourceTest {
 		pageVO.setSearch_type("user_id"); //검색타입 all, user_id, user_name
 		//위 위치가 다른 설정보다 상단이면 에러발생 : 이유는 calcPage()가 실행시 위 3가지 변수값이 저장되어 있어야 계산메서드가 정상작동되기 때문
 		//위 토탈카운트 변수값은 startPage, endPage 계산에 필수이다.
-		pageVO.setSearch_keyword("admin");
+		pageVO.setSearch_keyword("user_del");
 		//매퍼쿼리_DAO클래스_Service클래스_JUnit(나중엔 컨트롤러에서 작업) 이제 역순으로 작업진행
 		//더 진행하기 전에 현재 pageVO 객체에는 어떤값이 들어있는지 확인 후 사용(아래)
 		logger.info("pageVO 저장된 값 확인: "+pageVO.toString());
