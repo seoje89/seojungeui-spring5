@@ -26,6 +26,26 @@ if조건문에서 test 조건부분에 문자열 비교시 '문자열'.toString(
 	   	</if>
     </if>
 </sql>
+<!-- jsp 수정 페이지에서 수정할 내용을 입력하는 쿼리 
+	사용자 정보 수정시 매번 암호를 넣지 않기 때문에 조건을 달아서 암호변경값이 있을때만 수정되게 처리
+-->
+<update id="updateMember">
+	update tbl_member set
+	email = #{email},
+	enabled = #{enabled},
+	levels = #{levels},
+	point = #{point},
+	update_date = systimestamp,
+	<if test="user_pw != ''">
+	user_pw = #{user_pw},
+	</if>
+	user_name = #{user_name}
+	where user_id = #{user_id}
+</update>
+<!-- jsp 상세보기에 출력할 내용을 뽑아내는 쿼리 -->
+<select id="readMember" resultType="com.edu.vo.MemberVO">
+	select * from tbl_member where user_id = #{user_id}
+</select>
 <!-- jsp폼에서 전송받은 user_id 값의 데이터를 이용해서 DB에 해당 레코드 삭제(아래) -->
 <delete id="deleteMember">
 delete from tbl_member where user_id = #{user_id}
