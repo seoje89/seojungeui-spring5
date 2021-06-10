@@ -52,12 +52,16 @@ public class DataSourceTest {
 		memberVO.setLevels("ROLE_ADMIN");
 		memberVO.setPoint(100);
 		memberVO.setUser_name("최고관리자");
-		memberVO.setUser_pw("1234"); //1사이클 돌린후 스프링시큐리티(암호화로직) 적용
-		//스프링5시큐리티 적용 로직(아래)
+		memberVO.setUser_pw(""); //암호를 입력하지 않으면 업데이트에서 제외된다
+		//메서드 내 적용된 객체변수 생성
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		//스프링5시큐리티 적용 로직(아래)
+		if((memberVO.getUser_pw()).length() > 0) {
 		String userPwEncoder = passwordEncoder.encode(memberVO.getUser_pw());
 		memberVO.setUser_pw(userPwEncoder); // 암호화된 헤시데이터가 memberVO객체에 임시저장됨
+		}
 		memberVO.setUser_id("admin"); //수정조회조건에 사용(실제 수정하는건 아님)
+		memberService.updateMember(memberVO);
 		//========== 여기까지는 jsp에서 1명의 회원만 수정할때 사용하는 로직
 		//========== 이후부터는 모든회원중에 시큐리티 암호화가 아직인 사용자의 암호만 업데이트하는 로직
 		//아래 수정 호출을 회원수만큼 반복해야함(아래)
