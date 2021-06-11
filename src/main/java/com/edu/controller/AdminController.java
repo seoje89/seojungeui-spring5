@@ -9,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.edu.service.IF_MemberService;
 import com.edu.vo.MemberVO;
@@ -30,8 +32,20 @@ public class AdminController {
 	//이 메서드는 회원목록을 출력하는 jsp와 매핑된다.
 	@Inject
 	private IF_MemberService memberService;
+	@RequestMapping(value="/admin/member/member_view",method=RequestMethod.GET)
+	public String viewMemberForm(Model model, @RequestParam("user_id") String user_id, @ModelAttribute("pageVO")PageVO pageVO) throws Exception {
+		/*
+		 * 이 메서드는 리스트페이지에서 상세보기로 이동할때 보여주는 1개 레코드값을 보여주는 구현을 한다.
+		 * JUnit에서 테스트했던 readMember 방식을 이용
+		 * 다른점은 JUnit에서는 식별자 ID를 강제로 지정했지만, 이 메서드에서는 @RequestParam 인터페이스를 이용해서 식별자값을 받음.
+		 */
+		
+		//위 출력값 memberVO 1개의 레코드를 model을 이용해서 member_view.jsp로 보낸다.(아래)
+		model.addAttribute("memberVO", memberService.readMember(user_id));
+		return "admin/member/member_view";//상대경로 폴더파일위치
+	}
 	@RequestMapping(value="/admin/member/member_list", method=RequestMethod.GET)
-	public String selectMember(PageVO pageVO, Model model) throws Exception {
+	public String selectMember(@ModelAttribute("pageVO")PageVO pageVO, Model model) throws Exception {
 		//jsp의 검색버튼 클릭시 search_type, search_keyword 내용이 PageVO클래스에 Set된다.
 		/*
 		 * 이 메서드는 2개 객체를 생성하는 로직이 필요. 결과를 JSP로 보내는 기능을 수행
@@ -53,7 +67,7 @@ public class AdminController {
 		List<MemberVO> listMember = memberService.selectMember(pageVO); // 위 setPerPageNum이 20이면 next가 false(비활성화), 5이면 next가 true(활성화)
 		logger.info("디버그" + pageVO.toString()); // 지금까지 jsp -> 컨트롤러 일방향으로 자료 이동, 컨트롤러에서 jsp로 역방향으로 보내는 자료는 Model에 담아서 보내게 됨.
 		model.addAttribute("listMember", listMember);
-		model.addAttribute("pageVO", pageVO); // 나중에 @ModelAttribute로 대체 가능
+		//model.addAttribute("pageVO", pageVO); // 나중에 @ModelAttribute로 대체 가능
 		return "admin/member/member_list";//jsp 파일의 상대경로( / 로 시작하면 절대경로)
 	}
 	//URL요청 경로는 @RequestMapping 반드시 절대 경로로 표시
