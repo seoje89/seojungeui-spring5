@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ include file="../include/header.jsp" %>
 
   <!-- Content Wrapper. Contains page content -->
@@ -55,22 +57,30 @@
             <table class="table table-hover"> <!-- text-nowrap 줄바꿈 안할때 추가하는 클래스 -->
               <thead>
                 <tr>
-                  <th class="text-center">BNO</th>
-                  <th class="text-center">BOARD_TYPE</th>
-                  <th class="text-center col-6">TITLE</th>
-                  <th class="text-center">WRITER</th>
-                  <th class="text-center">REG_DATE</th>
+                  <th class="text-center">사용자 ID</th>
+                  <th class="text-center">사용자 이름</th>
+                  <th class="text-center">이메일</th>
+                  <th class="text-center">레벨</th>
+                  <th class="text-center">가입일자</th>
                 </tr>
               </thead>
               <tbody>
-                <!-- 아래 링크주소 jsp에서 프로그램 처리예정 -->
-                <tr style="cursor: pointer;"; onclick="location.replace('board_view.html?bno=183');">
-                  <td>183</td>
-                  <td>NOTICE</td>
-                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  <td><span class="tag tag-success">Approved</span></td>
-                  <td>11-7-2014</td>
-                </tr>
+              	<!-- listMember 객체가 검색이 빈값일때 -->
+              	<c:if test="${empty listMember}">
+              		<tr>
+              		 <td colspan="5" class="text-center">조회된 값이 없습니다</td>
+              		</tr>
+              	</c:if>
+                <!-- jstl 반복문으로 listMember 객체 바인딩 -->
+                <c:forEach var="memberVO" items="${listMember}">
+	                <tr style="cursor: pointer;"; onclick="location.replace('/admin/member/member_view?user_id=${memberVO.user_id}');">
+	                  <td><c:out value="${memberVO.user_id}" /></td>
+	                  <td><c:out value="${memberVO.user_name}" /></td>
+	                  <td><c:out value="${memberVO.email}" /></td>
+	                  <td>${memberVO.levels}</td>
+	                  <td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss.SSSS" value ="${memberVO.reg_date}" /></td>
+	                </tr>
+                </c:forEach>
               </tbody>
             </table>
           </div>
@@ -79,29 +89,20 @@
         <!-- //컨텐츠 내용 -->
          <!-- 페이징 처리 -->
         <div class="col=12 text-right">
-          <a href="board_write.html" class="btn btn-primary mb-3">글쓰기</a>
+          <a href="/admin/member/member_insert" class="btn btn-primary mb-3">회원등록</a>
+          
           <ul class="pagination justify-content-center">
             <li class="paginate_button page-item previous disabled" id="example2_previous">
               <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
             </li>
-            <li class="paginate_button page-item active">
-              <a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a>
-            </li>
-            <li class="paginate_button page-item ">
-              <a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a>
-            </li>
-            <li class="paginate_button page-item ">
-              <a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a>
-            </li>
-            <li class="paginate_button page-item ">
-              <a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a>
-            </li>
-            <li class="paginate_button page-item ">
-              <a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a>
-            </li>
-            <li class="paginate_button page-item ">
-              <a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a>
-            </li>
+            
+            <c:forEach begin="${pageVO.startPage}" end="${pageVO.endPage}" step="1" var="idx">
+            	
+            	<li class="paginate_button page-item active <c:out value="${idx==pageVO.page?'active':''}" />">
+                	<a href="/admin/member/member_list?page=${idx}" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">${idx}</a>
+             	</li>
+            </c:forEach>
+			            
             <li class="paginate_button page-item next" id="example2_next">
               <a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
             </li>
