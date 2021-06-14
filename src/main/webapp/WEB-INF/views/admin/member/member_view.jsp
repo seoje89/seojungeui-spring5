@@ -35,7 +35,7 @@
           <!-- /.card-header -->
           <!-- form start -->
           <!-- 첨부파일을 전송할때는 enctype 필수, 없으면 첨부파일 전송x -->
-          <form id="form_view" name="form_view" action="/admin/member/member_update_form" method="post" enctype="multipart/form-data">
+          <form id="form_view" name="form_view" action="/admin/member/member_update_form" method="GET" enctype="multipart/form-data">
             <div class="card-body">
               <div class="form-group">
                 <label for="exampleInputEmail1">사용자ID</label>
@@ -106,6 +106,7 @@ $(document).ready(function() {
 		if(confirm("정말로 삭제하시겠습니까?")) {
 			//위 컨펌대화상자에서 예를 누르면 아래 부분이 실행(아니오 누르면 취소됨)
 			$("#form_view").attr("action","/admin/member/member_delete");
+			$("#form_view").attr("method","post");
 			$("#form_view").submit();
 		}
 	});
