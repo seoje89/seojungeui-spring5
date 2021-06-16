@@ -26,10 +26,20 @@
 ============ 2주간 작업내역 끝(07.16 금) ==============
 - 헤로쿠 클라우드에 배포할때, 매퍼 폴더의 mysql폴더 내의 쿼리에 now()를 date_add(now(3), interval 9 HOUR)로 변경예정(이유는 DB서버의 타임존이 한국이 아니라 출력되는 시간이 다름)
 
+#### 20210617(목) 작업예정
+- 관리자 게시판 생성관리 CRUD 중 RU 처리 마무리예정
+- 관리자 게시판 생성관리 CRUD 중 D 처리 예정(AOP기능 구현)
+- [공지]06-17 목요일(4교시) UI 디자인 시험 있습니다.(화면기획서XLS제작, 화면설계서PPT제출용)
+- 관리자 게시물관리 CRUD 처리예정(파일업로드구현, 트랜잭션구현)
+
 #### 20210616(수) 작업
 - 관리자 게시판 생성관리 CRUD 처리(AOP기능 구현)
+- 게시판 생성관리 VO파일 :https://github.com/seoje89/seojungeui-spring5/blob/master/src/main/java/com/edu/vo/BoardTypeVO.java
+- 게시판 생성관리 Mapper파일:https://github.com/seoje89/seojungeui-spring5/blob/master/src/main/resources/mappers/oracle/boardTypeMapper.xml
+- 게시판 생성관리 DAO파일(인터페이스별도):https://github.com/seoje89/seojungeui-spring5/blob/master/src/main/java/com/edu/dao/BoardTypeDAOImpl.java
+- 게시판 생성관리 Service파일(인터페이스별도):https://github.com/seoje89/seojungeui-spring5/blob/master/src/main/java/com/edu/service/BoardTypeServiceImpl.java
 - 10년, 20년, 지금 변하지 않는것은 변수값의 흐름은 변함이 없음. 정방향 개발시작
-- 시작. VO -> 매퍼쿼리 xml -> DAO클래스 생성 -> Service 클래스 생성
+- 시작. VO -> 매퍼쿼리 xml -> DAO클래스 생성 -> Service 클래스 생성 -> 컨트롤러 -> jsp화면처리
 - 관리자 게시물관리 CRUD 처리(파일업로드구현, 트랜잭션구현)
 
 #### 20210615(화) 작업
