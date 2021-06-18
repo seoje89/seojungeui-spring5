@@ -24,11 +24,14 @@ save_file_name, real_file_name, reg_date, bno
 )
 values
 (
-#{save_file_name}, #{real_file_name}, sytdate,
-	select bno from (
+#{save_file_name}, #{real_file_name}, sytdate, #{bno}
+)
+<!-- 
+bno를 변수값으로 받는 로직을 추가했기 때문에 주석처리
+select bno from (
 		select bno from tbl_board order by bno desc
 	) where rownum = 1
-)
+ -->
 <!-- 위 bno는 게시물 등록시 첨부파일 쿼리는 bno 매개변수로 보낼수가 없는 상태 -->
 <!-- 게시물 등록시 발생된 bno를 구한 결과값 1개만 구해서 첨부파일의 bno 입력값으로 사용 : 서브쿼리사용 -->
 </insert>
@@ -54,9 +57,11 @@ where bno = #{bno}
 <select id="readBoard" resultType="com.edu.vo.BoardVO">
 select * from tbl_board where bno = #{bno}
 </select>
-<!-- bno필드변수 자동증가가 되는 기능이 필요 seq.nextVal -->
-<insert id="insertBoard">
-<selectKey keyProperty="seq_bno" resultType="int" order="BEFORE">
+<!-- bno필드변수 자동증가가 되는 기능이 필요 seq.nextVal
+parameterType 출력처리 성공
+ -->
+<insert id="insertBoard" parameterType="com.edu.vo.BoardVO">
+<selectKey keyProperty="bno" resultType="int" order="BEFORE">
 select seq_bno.nextval from dual
 </selectKey>
 insert into tbl_board 
@@ -65,7 +70,7 @@ bno, title, content, writer, reg_date, board_type
 )
 values 
 (
-#{seq_bno},#{title},#{content},#{writer},systimestamp,#{board_type}
+#{bno},#{title},#{content},#{writer},systimestamp,#{board_type}
 )
 </insert>
 <!-- 페이징을 제외한 검색쿼리(board_type포함)를 이용해서 게시물 개수 totalCount 변수값 구하기 -->
