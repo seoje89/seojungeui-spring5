@@ -8,6 +8,7 @@ package com.edu.vo;
  *
  */
 public class PageVO {
+	private String board_type; // 게시판 종류표시 전용 변수추가
 	private int queryStartNo; //쿼리전용 변수, 페이징쿼리에서 시작 페이지 인덱스번호
 	private int queryPerPageNum; //쿼리전용
 	private Integer page; // jsp에서 발생 자바전용. int인데 Null값을 허용
@@ -27,6 +28,14 @@ public class PageVO {
 				+ ", endPage=" + endPage + ", prev=" + prev + ", next=" + next + ", search_keyword=" + search_keyword
 				+ ", Search_type=" + Search_type + "]";
 	}
+	//Get,Set용 메서드 추가
+	public String getBoard_type() {
+		return board_type;
+	}
+	public void setBoard_type(String board_type) {
+		this.board_type = board_type;
+	}
+	
 	public int getQueryStartNo() {
 		//this.page-1 하는 이유는 jsp에서는 1부터 시작하지만 쿼리에서는 0부터 사용되기 때문에 page*페이지당 보여줄 개수
 		//queryStartNo = (this.page-1)*queryPerPageNum;
