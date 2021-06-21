@@ -88,7 +88,7 @@ select table_b.* from
 	<include refid="sqlWhere" />
 	) table_a
 	<![CDATA[
-	where rownum <= (#{queryStartNo}*#{queryPerPageNum})+#{queryPerPageNum}
+	where rownum <= #{queryStartNo}+#{queryPerPageNum}
 ) table_b where table_b.rnum > #{queryStartNo}*#{queryPerPageNum}
 	]]>
 </select>

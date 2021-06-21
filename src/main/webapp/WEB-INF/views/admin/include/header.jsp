@@ -110,7 +110,7 @@
             </a>
           </li>
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
+            <a href="/admin/board/board_list?board_type=${boardTypeVO.board_type}" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>게시물 관리
                 <i class="right fas fa-angle-left"></i>
