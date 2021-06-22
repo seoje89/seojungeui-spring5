@@ -72,7 +72,7 @@
                   <td>${boardVO.board_type}</td>
                   <td>${boardVO.title}</td>
                   <td>${boardVO.writer}</td>
-                  <td><fmt:formatDate pattern="yyyy-MM-dd hh:MM:ss.SSSS" value="${boardVO.reg_date}" /></td>
+                  <td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss.SSSS" value="${boardVO.reg_date}" /></td>
                 </tr>
                 </c:forEach>
                

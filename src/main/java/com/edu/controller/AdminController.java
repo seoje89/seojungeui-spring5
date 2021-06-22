@@ -1,6 +1,7 @@
 package com.edu.controller;
 
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,6 +50,26 @@ public class AdminController {
 	@Inject
 	private CommonUtil commonUtil;
 	
+	//게시물 삭제는 URL쿼리스트링으로 접근하지 않고, post방식으로 처리
+	@RequestMapping(value="/admin/board/board_delete", method=RequestMethod.POST)
+	public String board_delete(@RequestParam("bno") Integer bno, PageVO pageVO) throws Exception {
+		//디버그 삭제할 전역변수 경로 확인
+		logger.info("디버그 전역업로드경로: "+ commonUtil.getUploadPath());
+		//DB테이블 삭제한 이후, 첨부파일이 있으면 삭제처리 후 자바에서 파일 핸들링 처리
+		//기존 등록된 첨부파일 폴더에서 삭제할 UUID(고유한 식별값 만드는 클래스) 이름을 추출(아래)
+		List<AttachVO> delFiles = boardService.readAttach(bno); //해당게시물의 모든 첨부파일이 delFiles 객체에 임시로 담아놓음
+		boardService.deleteBoard(bno); //첨부파일 테이블 삭제 후 게시물 테이블 삭제
+		//물리적으로 파일삭제 처리 시작, 향상된 for문 사용
+		for(AttachVO file_name:delFiles) {
+			//File 클래스는 ("파일의 업로드된 위치", "삭제할 파일명");
+			File target = new File(commonUtil.getUploadPath(),file_name.getSave_file_name());
+			if(target.exists()) {
+				target.delete(); //물리적인 파일 지우는 명령
+			}
+		}
+		String queryString = "page="+pageVO.getPage()+"&search_type="+pageVO.getSearch_type()+"&search_keyword="+pageVO.getSearch_keyword();
+		return "redirect:/admin/board/board_list?"+queryString;
+	}
 	//게시물 상세보기 폼으로 접근하지 않고 URL 쿼리스트링으로 접근(GET사용)
 	@RequestMapping(value="/admin/board/board_view", method=RequestMethod.GET)
 	public String board_view(@RequestParam("bno") Integer bno,@ModelAttribute("pageVO")PageVO pageVO, Model model) throws Exception {
@@ -80,6 +101,10 @@ public class AdminController {
 	//게시물 목록은 폼으로 접근하지 않고 URL로 접근하기 때문에 GET방식을 사용
 	@RequestMapping(value="/admin/board/board_list", method=RequestMethod.GET)
 	public String board_list(@ModelAttribute("pageVO") PageVO pageVO, Model model) throws Exception {
+		//게시판타입이 null일때 기본값으로 notice를 추가
+		if(pageVO.getBoard_type() == null) {
+			pageVO.setBoard_type("notice");
+		}
 		//페이징처리를 위한 기본값 추가
 		if(pageVO.getPage() == null) {
 			pageVO.setPage(1);
