@@ -84,7 +84,7 @@
               	POST방식으로  보낸다 -->
               <input type="hidden" name="page" value="${pageVO.page}">
               <input type="hidden" name="search_type" value="${pageVO.search_type}">
-              <input type="hidden" name="search_keyword" value="${pageVO.search_keyword}">
+              <%-- <input type="hidden" name="search_keyword" value="${pageVO.search_keyword}"> --%>
               <input type="hidden" name="user_id" value="${memberVO.user_id}">
             </div>
           </form>
