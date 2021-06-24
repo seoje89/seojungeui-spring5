@@ -49,7 +49,7 @@
               </div>
               <div class="form-group">
                 <label for="content">글내용</label>
-                <textarea name="content" id="content" class="form-control" placeholder="내용을 입력해주세요" required>${boardVO.content}</textarea>
+                <textarea name="content" id="content" class="form-control" placeholder="내용을 입력해주세요">${boardVO.content}</textarea>
               </div>
               <div class="form-group">
                 <label for="writer">작성자</label>
@@ -101,6 +101,23 @@
   <!-- /.content-wrapper -->
 
 <%@ include file = "../include/footer.jsp" %>
+<!-- 첨부파일 개별삭제 -->
+<script>
+$(document).ready(function(){
+	$('.btn_file_delete').click(function(){
+		if(confirm('선택한 첨부파일을 삭제 하시겠습니까?')){
+			var click_element = $(this); //현재 클릭한 버튼을 변수로 처리
+			var sav_file_name = click_element.parent().find('input[name=save_file_name]').val();
+			$.ajax({
+			url:'',
+			
+			});
+		}
+		
+		
+	});
+});
+</script>
 <!-- 첨부파일 input태그 디자인 안쪽에 집어넣는 확장프로그램 -->
 <script src="/resources/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 
@@ -133,6 +150,13 @@ $(document).ready(function(){
 			fontNames: ['Arial', 'Arial Black', '맑은 고딕', '궁서', 'Nanum Gothic'],
 			fontSizes: ['8','10','12','14','16','18','20','22','24','26','28','30'],
 			fontNamesIgnoreCheck: ['Nanum Gothic']
+		});
+		//서머노트에서 html5의 required 속성 작동이 안되기 때문에 아래코드 추가
+		$("form[name='form_write']").on('submit',function(e){
+			if($('#content').summernote('isEmpty')) {
+				alert('내용은 반드시 입력해주세요');
+				e.preventDefault();//submit(전송)기능을 사용금지
+			}
 		});
 	});
 </script>
