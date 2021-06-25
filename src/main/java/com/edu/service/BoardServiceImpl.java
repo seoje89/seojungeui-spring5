@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.edu.dao.IF_BoardDAO;
+import com.edu.dao.IF_ReplyDAO;
 import com.edu.vo.AttachVO;
 import com.edu.vo.BoardVO;
 import com.edu.vo.PageVO;
@@ -22,6 +23,8 @@ import com.edu.vo.PageVO;
 public class BoardServiceImpl implements IF_BoardService {
 	@Inject
 	private IF_BoardDAO boardDAO;
+	@Inject
+	private IF_ReplyDAO replyDAO;
 	
 	@Override
 	public List<AttachVO> readAttach(Integer bno) throws Exception {
@@ -43,7 +46,8 @@ public class BoardServiceImpl implements IF_BoardService {
 		// 위와같은 상황을 방지하는 목적으로 @Transantional 애노테이션을 사용
 		//특이사항 : 첨부파일은 DB만 삭제해서는 해결이 안됨 + 실제 업로드된 파일도 삭제가 필요함
 		boardDAO.deleteAttachAll(bno);
-		// 댓글삭제는 댓글폼 만든 이후에 처리
+		// 댓글삭제는 댓글폼 만든 이후에 처리, 0625추가 : 댓글DAO에서 deleteReplyALL실행
+		replyDAO.deleteReplyAll(bno);
 		boardDAO.deleteBoard(bno);
 	}
 	

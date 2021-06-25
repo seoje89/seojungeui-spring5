@@ -15,7 +15,7 @@ insert into tbl_attach (save_file_name, real_file_name, reg_date, bno)
 values (#{save_file_name}, #{real_file_name}, sysdate, #{bno})
 </insert>
 <select id="readAttach" resultType="com.edu.vo.AttachVO">
-select * from tbl_attach where bno = #{bno}
+select * from tbl_attach where bno = #{bno} order by reg_date asc
 </select>
 <insert id="insertAttach">
 insert into tbl_attach
