@@ -59,12 +59,19 @@
               </div>
               <div class="form-group">
                 <label for="exampleInputFile">첨부파일</label>
+                <div class="input-group">
                 <c:forEach begin="0" end="1" var="idx">
 	                <c:if test="${boardVO.save_file_names[idx] != null}">
-	                <div class="input-group">
-	                  <div class="">
-	                   	<!-- 첨부파일을 url로 직접접근하지 못하기 때문에 컨트롤러로만 접근이 가능(다운로드 전용 메서드 생성)  -->
-	                  	<a href="/download?save_file_name=${boardVO.save_file_names[idx]}&real_file_name=${boardVO.real_file_names[idx]}">
+	                
+	                  <div class="" style="height:500px; overflow:scroll;">
+	                  	<!-- JSTL의 c:url 태그로 URL을 감싸주면 인코딩처리됨(한글이 인코딩됨) -->
+	                  	<c:url value="/download" var="url">
+	                  		<c:param name="save_file_name" value="${boardVO.save_file_names[idx]}" />
+	                  		<c:param name="real_file_name" value="${boardVO.real_file_names[idx]}" />
+	                  	</c:url>
+	                  	<a href="${url}">
+	                   	<!-- 첨부파일을 url로 직접접근하지 못하기 때문에 컨트롤러로만 접근이 가능(다운로드 전용 메서드 생성) IE에서 한글 쿼리스트링 문제때문에 사용안함 -->
+	                  	<%-- <a href= "<c:url value='/download?save_file_name=${boardVO.save_file_names[idx]}&real_file_name=${boardVO.real_file_names[idx]}' />"> --%>
 	                     ${boardVO.real_file_names[idx]}
 	                    </a>
 	                    <!-- jstl에서 변수사용하기 fn:split('데이터','분할기준값') 목적: 확장자를 이용해서 이미지 미리보기 실행유무(img태그 사용여부) 결정
@@ -87,10 +94,10 @@
 	                    	</c:otherwise>
 	                    </c:choose>
 	                  </div>
-	                </div>
+	                
 	                </c:if>
                 </c:forEach>
-              
+              	</div>
               </div>
             </div>
             <!-- /.card-body -->

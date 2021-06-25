@@ -9,7 +9,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">${boardVO.board_type} 글쓰기</h1>
+            <h1 class="m-0">${boardVO.board_type} 글수정</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -28,7 +28,7 @@
         <!-- 컨텐츠 내용 -->
         <div class="card card-primary">
           <div class="card-header">
-            <h3 class="card-title">등록</h3>
+            <h3 class="card-title">수정</h3>
           </div>
           <!-- /.card-header -->
           <!-- form start -->
@@ -67,7 +67,12 @@
                   <!-- 기존 업로드된 파일을 수정폼에 보여주기, 삭제버튼 필요(아래) -->
                   <c:if test="${boardVO.save_file_names[idx] != null}">
                   	<p class="text-muted">
-                  	<a href="/download?save_file_name=${boardVO.save_file_names[idx]}&real_file_name=${boardVO.real_file_names[idx]}">
+                  	<c:url value="/download" var="downloadUrl" >
+                  		<c:param name="save_file_name" value="${boardVO.save_file_names[idx]}" />
+                  		<c:param name="real_file_name" value="${boardVO.real_file_names[idx]}" />
+                  	</c:url>
+                  	<a href="${downloadUrl}">
+                  	<%-- <a href="/download?save_file_name=${boardVO.save_file_names[idx]}&real_file_name=${boardVO.real_file_names[idx]}"> --%>
                   	${boardVO.real_file_names[idx]}
                   	</a>
                   	&nbsp; <button type="button" class="btn btn-info btn_file_delete">삭제</button>
@@ -107,14 +112,21 @@ $(document).ready(function(){
 	$('.btn_file_delete').click(function(){
 		if(confirm('선택한 첨부파일을 삭제 하시겠습니까?')){
 			var click_element = $(this); //현재 클릭한 버튼을 변수로 처리
-			var sav_file_name = click_element.parent().find('input[name=save_file_name]').val();
+			var save_file_name = click_element.parent().find('input[name=save_file_name]').val();
 			$.ajax({
-			url:'',
-			
+				type:'post',
+				url:'/file_delete?save_file_name='+save_file_name,//컨트롤러구현
+				dataType:"text",//반환받는 데이터 형식
+				success:function(result) {
+					if(result=="success") {
+						click_element.parents(".div_file_delete").remove();
+					}
+				},
+				error:function() {
+					alert("RestApi서버가 작동하지 않습니다. 잠시후에 이용해 주세요");
+				}
 			});
-		}
-		
-		
+		}		
 	});
 });
 </script>

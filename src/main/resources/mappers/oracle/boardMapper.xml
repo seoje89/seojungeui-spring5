@@ -24,7 +24,7 @@ save_file_name, real_file_name, reg_date, bno
 )
 values
 (
-#{save_file_name}, #{real_file_name}, sytdate, #{bno}
+#{save_file_name}, #{real_file_name}, sysdate, #{bno}
 )
 <!-- 
 bno를 변수값으로 받는 로직을 추가했기 때문에 주석처리

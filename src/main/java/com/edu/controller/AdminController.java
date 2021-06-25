@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.edu.dao.IF_BoardDAO;
 import com.edu.service.IF_BoardService;
 import com.edu.service.IF_BoardTypeService;
 import com.edu.service.IF_MemberService;
@@ -50,6 +51,43 @@ public class AdminController {
 	private IF_BoardService boardService; //DI로 스프링빈을 주입해서 객체로 생성
 	@Inject
 	private CommonUtil commonUtil;
+	@Inject
+	private IF_BoardDAO boardDAO;
+	
+	//게시물 등록을 POST로 처리
+	@RequestMapping(value="/admin/board/board_insert", method=RequestMethod.POST)
+	public String board_insert(@RequestParam("file") MultipartFile[] files,BoardVO boardVO) throws Exception {
+		//위 메서드의 BoardVO boardVO 파싱 -> 
+		//내부작동은 다음처럼됨 @RequestParam("title") String Title, @RequestParam("content") String content, @RequestParam("writer") ...
+		//신규등록이기때문에 기존 첨부파일 불러오는 로직은 필요없음
+		//AttachVO 테이블에 가로데이터를 세로데이터로 입력하기 위해서..
+		//save_file_names[] = ["uuid1.jpg","uuid2.jpg"]
+		//real_file_names[] = ["슬라이드1.jpg","슬라이드2.jpg"]
+		String[] save_file_names = new String[files.length];
+		String[] real_file_names = new String[files.length];
+		int index = 0; //첨부파일이 1개 이상일때 반복변수로 사용
+		for(MultipartFile file:files) {
+			if(file.getOriginalFilename() != "") {//첨부파일이 있으면 실행
+				save_file_names[index] = commonUtil.fileUpload(file); //물리적인 파일 저장
+				real_file_names[index] = file.getOriginalFilename(); //UI용 파일이름
+			}
+			index = index + 1; // index++
+		}
+		//신규등록 jsp폼에서 보내온 boardVO 값에 아래  file에 대한 임시변수값을 저장하는 로직
+		boardVO.setSave_file_names(save_file_names);
+		boardVO.setReal_file_names(real_file_names);
+		boardService.insertBoard(boardVO); // DB에 저장하는 서비스 호출
+		return "redirect:/admin/board/board_list";//게시판 테러방지용 redirect 사용(새로고침시 무한등록방지)
+		//게시판 신규등록시 자동으로 1페이지로 이동
+	}
+	//게시물 등록 폼을 Get으로 호출
+	@RequestMapping(value="/admin/board/board_insert_form", method=RequestMethod.GET)
+	public String board_insert_form(@ModelAttribute("pageVO")PageVO pageVO) throws Exception {
+		if(pageVO.getPage() == null) {
+			pageVO.setPage(1);
+		}
+		return "admin/board/board_insert"; //.jsp생략
+	}
 	
 	//게시물 수정처리는 POST로만 접근가능
 	@RequestMapping(value="/admin/board/board_update", method=RequestMethod.POST)
