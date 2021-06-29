@@ -17,7 +17,7 @@
 	<!-- 댓글을 등록할때 게시판테이블에 reply_count필드의 값이 1발생 -->
 	<!-- 댓글을 삭제할때 게시판테이블에 reply_count필드의 값이 -1발생 -->
 	<update id="replyCountUpdate">
-	update tbl_board set reply_count = reply_count + #{count}
+	update tbl_board set reply_count = nvl(reply_count,0) + #{count}
 	where bno = #{bno}
 	</update>
 	<!-- 댓글에서는 Read가 별도로 존재하지 않고 Select로 구현 가능 -->
