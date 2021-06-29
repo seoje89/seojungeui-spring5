@@ -144,7 +144,7 @@
                 </div>
                 <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
                 <button type="button" class="btn btn-warning" id="btn_reply_write">댓글등록</button>
-                <input type="hidden" value="" id="reply_page">
+                <input type="hidden" value="1" id="reply_page">
                 </div>
               </div>
               </div>
@@ -232,6 +232,31 @@
   <!-- /.content-wrapper -->
 
 <%@ include file="../include/footer.jsp" %>
+<!-- 모달창(초기엔 숨김상태 - 수정버튼 클릭하면 나오는 창) -->
+<div class="modal fade" id="modal-reply">
+	<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<h4 class="modal-title">작성자명</h4>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<input class="form-control" type="text" name="modal_reply_text" id="modal_reply_text" value="댓글내용출력">
+	</div>
+	<div class="modal-footer"> <!-- justify-content-between:양쪽배분정렬 -->
+		<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+		<button id="btn_reply_update" type="button" class="btn btn-primary">수정</button>
+		<button id="btn_reply_delete" type="button" class="btn btn-danger">삭제</button>
+		<input type="hidden" id="rno" name="rno">
+	</div>
+	</div>
+	<!-- /.modal-content -->
+</div>
+	<!-- /.modal-dialog -->
+  </div>
+<!-- //모달창 -->
 <script>
 //댓글 리스트 출력 함수
   var printReplyList = function(data, templateData, target) {
@@ -248,33 +273,114 @@
 	// pageVO = 스프링에서 받은 json데이터, 변수 3개 pageVO.prev(이전 데이터가 있다면 true), pageVO.next(다음 데이터가 있다면 true), pageVO=5페이지 가정
 	var pagination = ''; // 문자열 누적변수
 	// Previous 출력(아래)
-	pagination += '<li class="paginate_button page-item previous disabled" id="example2_previous">';
-	pagination += '<a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>';
+	var prevlink, nextlink;
+	if(pageVO.prev) { prevlink = ''; } else { prevlink = 'disabled'; }
+	pagination += '<li class="paginate_button page-item previous '+prevlink+'" id="example2_previous">';
+	pagination += '<a href="'+(pageVO.startPage-1)+'" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>';
 	pagination += '</li>'; //pagination = pagination + 과 pagination += 동일(단축)
 	// previous 출력 끝
 
 	var active = '';
-	for(var i=0; i<pageVO; i++) {
+	for(var i=pageVO.startPage; i<=pageVO.endPage; i++) {
 		if(i==0) { active = 'active'; } else { active = ''; }
 		pagination += '<li class="paginate_button page-item '+active+'">';
-		pagination += '<a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">'+(i+1)+'</a>';
+		pagination += '<a href="'+i+'" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">'+(i)+'</a>';
 		pagination += '</li>';
 	}
 	// Next 출력(아래)
-	pagination += '<li class="paginate_button page-item next" id="example2_next">';
-	pagination += '<a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>';
+	if(pageVO.next) { nextlink = ''; } else { nextlink = 'disabled'; }
+	pagination += '<li class="paginate_button page-item next '+nextlink+'" id="example2_next">';
+	pagination += '<a href="'+(pageVO.endPage+1)+'" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>';
 	pagination += '</li>';
 	$(target).append(pagination);
   };
+//함수형 변수로서 댓글 리스트를 RestAPI에서 받아서 출력하는 변수
+var replyList = function(){
+	var page = $("#reply_page").val();
+	$.ajax({
+		type:"post",
+		url:"/reply/reply_list/${boardVO.bno}/"+page,
+		dateType:"json",//전송받는 데이터형태 json
+		success:function(result){
+			if(typeof result=="undefined" || result=="" || result==null) {
+				$("#collapseReply").empty();//div태그 안의 내용만 삭제하기
+				$("#collapseReply").html('<div class="pagination justify-content-center"><ul class="pagination pageVO">조회된 값이 없습니다.</ul></div>');//div태그 안의 내용을 추가하기
+				
+			}else{
+				//json데이터를 화면에 파싱(구버전:xml 복잡한 태그 데이터를 파싱)
+				//템플릿 빵틀에 result 데이터를 바인딩해서 출력
+				//JSON.parse(문자열) -> 일반문자열을 json으로 변경하는 함수
+				//JSON.stringify(json데이터) -> json데이터를 일반문자열로 변경하는 함수
+				console.log("여기까지" + JSON.stringify(result.replyList));//크롬 콘솔에서 확인
+				printReplyList(result.replyList, $("#template"), $("#collapseReply"));
+				printPagingList(result.pageVO,".pagination");
+			}
+		},
+		error:function(){
+			alert("RestAPI서버가 작동하지 않습니다. 다음에 이용해주세요.");
+		}
+	})
+};
 </script>
 <script>
 //댓글 CRUD처리
 $(document).ready(function() {
+	//댓글 모달창 삭제버튼 액션처리(아래)
+	$("#btn_reply_delete").click(function(){
+		
+	});
+	//댓글 모달창 수정버튼 액션처리(아래)
+	$("#btn_reply_update").click(function(){
+		//댓글 수정할때 필요한 변수 확인
+		var reply_text = $("#modal_reply_text").val(); // modal내 태그로 변경
+		var rno = $("#rno").val(); // modal 내 input 태그로 추가
+		if(reply_text == '' || rno == '') { // && 은 and(전부 만족해야 실행됨), || 은 or(하나라도 만족하면 실행됨)
+			alert("댓글내용은 필수입력값입니다");
+			return false; //더이상 실행없이 콜백함수를 빠져나감 
+		}
+		$.ajax({
+			type:'patch', //컨트롤러의 method값과 같아야함
+			url:'/reply/reply_update',
+			dataType:'text', // RestAPI 컨트롤러에서 받는 데이터형식
+			data:JSON.stringify({
+				rno:rno,
+				reply_text:reply_text
+			}), //보내는 데이터 자체는 텍스트 형식으로 변경(형식은 text지만 타입은 json)
+			headers:{ //보내는 데이터 형식
+				"Content-Type":"application/json",
+				"X-HTTP-Method-Override":"PATCH"
+			},//json데이터 형식으로 브라우저에 내장된 헤더값을 지정
+			success:function(result){ // 댓글 입력이 성공했을때
+				if(result=="success"){
+					alert("수정에 성공했습니다.");
+					//모달창 숨기기(아래)
+					$("#modal-reply").modal("hide");
+					//댓글 수정 후 화면에 댓글 목록 출력하는 함수실행
+					replyList();//화면의 일부분만 리프레시(재생)
+				}
+				
+			},
+			error:function() {
+				alert("RestAPI 서버가 작동하지 않습니다. 잠시후 이용해 주세요.")
+			}
+		});
+	});
+	//하단 페이징 링크의 링크속성 처리(아래)
+	$(".pagination").on("click","li a",function(event){
+		event.preventDefault();//a태그의 링크속성을 사용하지 않겠다
+		$("#reply_page").val($(this).attr("href"));
+		replyList();
+	});
+	//댓글 리스트 버튼(아래)
+	$("#btn_reply_list").click(function(){
+		replyList();//댓글 리스트 출력 Ajax 호출
+	});
+	//댓글 등록 버튼(아래)
 	$("#btn_reply_write").click(function(){
 		//RestAPI 엔드포인트로 보낼값 지정
 		var bno = "${boardVO.bno}"; // 자바변수값 : 게시물번호
 		var reply_text = $("#reply_text").val();
-		var replyer = $("replyer").val();
+		var replyer = $("#replyer").val();
 		if(reply_text == '' || replyer == '') { // && 은 and(전부 만족해야 실행됨), || 은 or(하나라도 만족하면 실행됨)
 			alert("작성자ID와 댓글내용은 필수입력값입니다");
 			return false; //더이상 실행없이 콜백함수를 빠져나감 
@@ -325,3 +431,13 @@ $(document).ready(function(){
 	
 });
 </script>
+<script>
+  // 댓글리스트에서 수정 버튼클릭시 현재 선택한 값을 모달창에 보여주는 것을 구현(아래)
+  $(document).ready(function(){
+    $('.timeline').on("click", '.div_template', function(){
+      $('#rno').val($(this).attr('data-rno'));
+      $('#modal_reply_text').val($(this).find('.timeline-body').text());
+      $('.modal-title').html($(this).find('.timeline-header').text());
+    });
+  });
+  </script>
