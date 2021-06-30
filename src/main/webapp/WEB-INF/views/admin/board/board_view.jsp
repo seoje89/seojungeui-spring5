@@ -327,7 +327,30 @@ var replyList = function(){
 $(document).ready(function() {
 	//댓글 모달창 삭제버튼 액션처리(아래)
 	$("#btn_reply_delete").click(function(){
-		
+		//댓글을 삭제할때 필요한 변수 2개 rno(삭제쿼리),bno(댓글카운트업데이트) 확인
+		var rno = $("#rno").val(); //모달창의 input태그의 값을 가져오기
+		var bno = "${boardVO.bno}"; //자바변수값. @Controller의 model에 담긴 값을 사용
+		$.ajax({
+			type:"delete", //전송타입, 컨트롤러의 RequestMethod의 값과 동일
+			url:"/reply/reply_delete/"+bno+"/"+rno, //endpoint = @RestController의 @RequestMapping(value="")
+			dataType:"text", //결과값을 받는 데이터형식 text-String, json-Map<String,Object>
+			/* data:"", //처리할 값을 보내는 데이터형식  <- json을 사용하지 않고 패스베리어블로 보내기 때문에 필요없음 */
+			/* headers:"", //크롬의 개발자도구 > 네트워크항목의 오른쪽 창에서 확인가능,전송방식때문에 필요하지만 패스베리어블로 보내서 필요없음 */
+			success:function(result){
+				if(result=="success"){
+					alert("삭제되었습니다.");
+					//삭제 후 모달창 숨기고, 댓글카운트UI -1처리, 댓글리스트 리프레시(랜더링)
+					$("#modal-reply").modal("hide");
+					var reply_count = $("#reply_count").text();//Get
+					$("#reply_count").text(parseInt(reply_count)-1);//Set
+					$("#reply_page").val("1"); //삭제한 후 1페이지로 이동, 삭제후 남은 댓글이 5개 단위로 떨어질때 값을 잃어서 댓글페이지가 제대로 안뜨는 현상 처리 
+					replyList();
+				}
+			},
+			error:function(){
+				alert("RestAPI서버가 작동하지 않습니다. 다음에 시도해주세요.");
+			}
+		});
 	});
 	//댓글 모달창 수정버튼 액션처리(아래)
 	$("#btn_reply_update").click(function(){
@@ -404,6 +427,7 @@ $(document).ready(function() {
 				//댓글을 신규등록 후 댓글 페이징의 1페이지로 이동
 				$("#reply_page").val("1"); // val()로 값을 입력, input태그
 				//댓글 입력 후 화면에 댓글 목록 출력하는 함수실행(만들예정)
+				replyList();
 			},
 			error:function() {
 				alert("RestAPI 서버가 작동하지 않습니다. 잠시후 이용해 주세요.")
