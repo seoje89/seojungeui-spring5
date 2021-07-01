@@ -1,6 +1,41 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="./include/header.jsp" %>
+<script>
+// 메인페이지 전용 슬라이드 호출 부분 : index에서만 필요한 코드이기 때문에
+$(document).ready(function() {
+	// 위에서 선언한 함수 | 변수 사용(아래)
+	// 여기서부터 함수호출(실행)
+	slideAuto = setTimeout('play_w("right")', 3000); //3초 후에 play_w 함수 실행
+	var slidePlayHide = setTimeout(function(){
+		$('.rollplay').css('display','none');
+	},3000); // 3초 후에 rollplay 클래스 영역을 숨김
+	// 3개의 슬라이드 버튼 클릭 액션처리
+	$('.rollstop').click(function(){
+		// this 는 클릭한 본인 태그를 말함.
+		$(this).hide(); // 현재 stop버튼 숨김.
+		$('.rollplay').css('display','inline-block');
+		if(slideAuto) {
+			clearTimeout(slideAuto); //slideAuto 라는 변수가 없다면, play_w함수를 실행중지
+		}
+	});
+	$('.rollplay a').click(function(){
+		$(this).parent().hide(); //a태그의 부모 rollplay 영역을 가리킴
+		$('.rollstop').css('display','inline-block');
+		play_w('right'); // 3초마다 슬라이드 이미지 액션이 발생
+	});
+	$('.rollingbtn li.seq a').each(function(index){
+		$(this).click(function() {
+			$('.rollplay').hide();
+			$('.rollstop').css('display','inline-block');
+			if(slideAuto) {
+				clearTimeout(slideAuto); //슬라이드 중지
+			}
+			play_w(index); //슬라이드 재생 : 단, 시작위치는 클릭한 index부터 무한반복
+		});
+	});
+});
+</script>
 	
 	<!-- 메인콘텐츠영역 -->
 	<div id="container">

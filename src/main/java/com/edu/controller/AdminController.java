@@ -289,9 +289,11 @@ public class AdminController {
 		//업데이트 쿼리서비스 호출하기 전 스프링시큐리티 암호화 적용
 		String rawPassword = memberVO.getUser_pw();
 			if(!rawPassword.isEmpty()) { //수정폼에서 암호 입력값이 비어있지 않을때만 아래 로직 실행
-			BCryptPasswordEncoder passwordEncoder = new 		BCryptPasswordEncoder();
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String encPassword = passwordEncoder.encode(rawPassword);
 			memberVO.setUser_pw(encPassword);
+			//스프링시큐리티 내장클래스에서 user_pw(admin1234)와 password(해시값) 비교함수
+			//passwordEncoder.matches(rawPassword, encodedPassword);
 		}
 		memberService.updateMember(memberVO); //반환값이 없음
 		//redirect로 페이지를 이동하면, model로 담아서 보낼수 없음. 쿼리스트링(URL?)으로 보낸다.

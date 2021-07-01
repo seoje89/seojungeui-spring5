@@ -51,6 +51,16 @@
 	 delete-cookies="JSESSIONID,SPRING_SECURITY_REMEMBER_ME_COOKIE"/>
 </security:http>
 <!-- 스프링시큐리티나 OAuth2.0 무엇이 되었든, 2개로 구성됨. Authentication(인증), Authority(권한) -->
+<!-- /login이 호출되면 아래 쿼리가 실행되면서 최초로 데이터가 발생됨 : 스프링시큐리티 클래스에서 실행
+	user_id, user_pw
+	user-by-username-query  이 쿼리가 실행됨(user_id사용) 이 쿼리만 가지고는 비교안됨
+	위 쿼리결과인 password와 user_pw 비교해서 같으면 /login_success가 실행됨. false 시 다시 login폼
+	스프링시큐리티 내장클래스에서 user_pw(admin1234)와 password(해시값) 비교함수
+	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	스프링방식 : Boolean valueTrue = passwordEncoder.matches("admin1234", password); //.equals 비교불가
+	일반방식 : select * from tbl_member where user_id=user_id and user_pw=sha1(user_pw);
+	위 matches메서드를 사용할건지==암호화로 비교할건지 옵션을 추가
+ -->
 <security:authentication-manager>
 	<security:authentication-provider>
 		<security:jdbc-user-service 
@@ -58,6 +68,8 @@
 		users-by-username-query="select user_id as no,user_pw as password, enabled from tbl_member where user_id = ?"
 		authorities-by-username-query="select user_id as no,levels as authority from tbl_member where user_id = ?"
 		/>
+		<security:password-encoder ref="passwordEncoder" />
 	</security:authentication-provider>
 </security:authentication-manager>
+<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 </beans>
