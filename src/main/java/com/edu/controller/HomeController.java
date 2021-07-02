@@ -42,6 +42,36 @@ public class HomeController {
 	@Inject
 	private IF_MemberService memberService;
 	
+	//404에러 처리 GET 호출 추가
+	@RequestMapping(value="/home/error/error_404", method=RequestMethod.GET)
+	public String error_404() {
+		return "home/error/error_404"; //.jsp생략
+	}
+	//회원가입처리 호출 POST방식
+	@RequestMapping(value="/join", method=RequestMethod.POST)
+	public String join(MemberVO memberVO, RedirectAttributes rdat) throws Exception {
+		//rawPassword 비밀번호를 스프링시큐리티로 인코딩처리(아래)
+		String rawPassword = memberVO.getUser_pw();
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		memberVO.setUser_pw(passwordEncoder.encode(rawPassword));//암호화실행
+		
+		memberService.insertMember(memberVO);
+		rdat.addFlashAttribute("msg","회원가입"); // 회원가입 이(가) 성공했습니다 메세지 출력용
+		return "redirect:/login_form"; // 페이지 redirect로 이동
+	}
+	//회원가입폼 호출 GET방식
+	@RequestMapping(value="/join_form", method=RequestMethod.GET)
+	public String join_form() throws Exception {
+		
+		return "home/join"; // .jsp생략
+	}
+	//마이페이지에서 회원탈퇴 POST방식 처리
+	@RequestMapping(value="member/mypage_leave", method=RequestMethod.POST)
+	public String mypage_leave(MemberVO memberVO) throws Exception {
+		memberService.updateMember(memberVO);
+		//rdat.addFlashAttribute("msg", "회원 탈퇴");//스프링 내장된 logout을 사용해서 작동이 안됨 작동시키려면 /logout을 따로 만들면 가능
+		return "redirect:/logout";
+	}
 	//마이페이지 회원정보수정 POST방식, 처리 후 msg를 히든값으로 jsp로 전송
 	@RequestMapping(value="/member/mypage", method = RequestMethod.POST)
 	public String mypage(MemberVO memberVO, RedirectAttributes rdat) throws Exception {
