@@ -7,12 +7,24 @@
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
+	<!-- properties불러오는 스프링빈 생성(아래) -->
+	<bean id="propertyConfigure" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- <value>classpath:/properties/oracle.properties</value> -->
+				<value>classpath:/properties/hsql.properties</value>
+			</list>
+		</property>
+	</bean>
+	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- 알리아스Alias(별명) dataSource로 만듭니다. 이유? 여러개의 DB와 호환되게 만들게됨
 		오라클지원, Mysql, Hsql 등 여러 DB서버와 호환되게 만드는데 필요(아래) -->
-	<alias name="dataSource-oracle_local" alias="dataSource"/>
+	<alias name="dataSource-${DbType}" alias="dataSource"/>
+	
 	<!-- 로컬(PC) Hsql용-헤로쿠 클라우드에 배포용 드라이버 설정(아래) -->
 	<!-- <bean id="dataSource-hsql_local"></bean> -->
+	
 	<!-- 로컬(PC) 오라클 jdbc 드라이버 설정(아래) -->
 	
 	<!-- <bean id="dataSource-oracle_local" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -22,7 +34,42 @@
 				  value="jdbc:oracle:thin:@localhost:1521/XE"></property>
 		<property name="username" value="XE"></property>
 		<property name="password" value="apmsetup"></property>
-	</bean> -->
+		</bean> 
+	-->
+	<!-- embeded는 내장형(앱용)으로서 간단한 용도의 DB구조에 사용. file구조가 아닌 메모리 구조 가능
+		특징: 톰캣서버와 라이프사이클을 같이함, 초기암호는 admin/user02
+	 -->
+	<!-- /embeded/hsql_file.db를 자동으로 생성함(폴더포함) (아래) -->
+	<bean id="dataSource-hsql_local" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+		<property name="url" value="${DbUrl}" />
+		<property name="username" value="${DbUserName}" />
+		<property name="password" value="${DbPassword}" />
+	</bean>
+	
+	<!-- 위 생성DB파일에 더미데이터 생성시키는 스크립트(아래) 최초1회만 실행 -->
+	<!-- hsql이 아닌 다른 DB일때는 주석처리 필수 -->
+	<jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS"> 
+		<jdbc:script location="classpath:/db_script/hsql_file.sql" /> 
+	</jdbc:initialize-database>
+	
+	<!-- Hsql데이터베이스 매니저 실행 embeded/hsql_file.db 를 매니저에서 불러옴, 배포시엔 항상 주석처리 -->
+	<!-- hsql이 아닌 다른 DB일때는 주석처리 필수 주석 풀었을땐 value의 "- -" 다시 붙임  -->
+	<bean depends-on="dataSource-hsql_local"
+	class="org.springframework.beans.factory.config.MethodInvokingBean">
+	<property name="targetClass" value="org.hsqldb.util.DatabaseManagerSwing" />
+	<property name="targetMethod" value="main" />
+	<property name="arguments">
+		<list>
+			<value>- -url</value>
+			<value>jdbc:hsqldb:file:c:/embeded/hsql_file.db;hsqldb.lock_file=false</value>
+			<value>- -user</value>
+			<value>sa</value>
+			<value>- -password</value>
+			<value></value>
+		</list>
+	</property>
+	</bean>
 	
 	<!-- 로컬(PC) 오라클 jdbc 드라이버 설정(아래) -->
 	
@@ -30,17 +77,18 @@
 		<property name="driverClassName" 
 				  value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
 		<property name="url" 
-				  value="jdbc:log4jdbc:oracle:thin:@localhost:1521/XE"></property>
-		<property name="username" value="XE"></property>
-		<property name="password" value="apmsetup"></property>
+				  value="${DbUrl}"></property>
+		<property name="username" value="${DbUserName}"></property>
+		<property name="password" value="${DbPassword}"></property>
 	</bean>
 	
 	<!-- 위 오라클 빈을 스프링-마이바티스에서 사용 (아래) -->
+	<!-- 오라클용쿼리와 hsql(mysql)용 쿼리가 틀리기 때문에 아래 쿼리 위치 수정 -->
 	<!-- SQL세션팩토리(공장) 클래스를 빈으로 생성: 쿼리를 찍어낼수있는 메서드가 있는 클래스 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">	   
 	 	<property name="dataSource" ref="dataSource" />
 	 	<!-- 매퍼 xml로만든 쿼리파일의 경로를 인식하게 함.(아래 classpath경로 src/main/resources/쿼리xml) -->
-	 	 <property name="mapperLocations" value="classpath:mappers/**/oracle/*Mapper.xml"></property>
+	 	 <property name="mapperLocations" value="classpath:mappers/**/${QueryType}/*Mapper.xml"></property>
 	</bean>
 	<!-- 위 SQL세션팩토리를 이용해서 템플릿 클래스 생성(insert(),select(),update(),delete() 등의 메서드를 사용할수 있는 클래스) -->
 	<!-- 세션이름인 이유는 쿼리 접속정보/접속해제정보를 관리하기 때문에 -->
@@ -62,7 +110,7 @@
 	<!-- 파일업로드 설정 업로드 폴더위치 전역변수로 생성 -->
 	<bean id="uploadPath" class="java.lang.String">
 		<!-- bean을 실행시 초기값을 지정하려면 constructor 사용 -->
-		<constructor-arg value="d:\\egov\upload" />
+		<constructor-arg value="${UploadPath}" />
 	</bean>
 	
 </beans>
