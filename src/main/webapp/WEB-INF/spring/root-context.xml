@@ -11,9 +11,9 @@
 	<bean id="propertyConfigure" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<!-- <value>classpath:/properties/cloude.properties</value> -->
+				<value>classpath:/properties/cloude.properties</value>
 				<!-- <value>classpath:/properties/oracle.properties</value> -->
-				<value>classpath:/properties/hsql.properties</value>
+				<!-- <value>classpath:/properties/hsql.properties</value> -->
 			</list>
 		</property>
 	</bean>
@@ -48,7 +48,7 @@
 		<property name="password" value="${DbPassword}" />
 	</bean>
 	
-	<!-- 위 생성DB파일에 더미데이터 생성시키는 스크립트(아래) 최초1회만 실행 -->
+	<!-- 위 생성DB파일에 더미데이터 생성시키는 스크립트(아래) 최초1회만 실행 계속 실행하면 데이터가 계속 초기화됨 -->
 	<!-- hsql이 아닌 다른 DB일때는 주석처리 필수, 헤로쿠 클라우드일땐 주석 풀어줌 -->
 	<jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS"> 
 		<jdbc:script location="classpath:/db_script/hsql_file.sql" /> 
