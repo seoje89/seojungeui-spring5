@@ -11,9 +11,8 @@
 	<bean id="propertyConfigure" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:/properties/cloude.properties</value>
+				<value>classpath:/properties/cloud.properties</value>
 				<!-- <value>classpath:/properties/oracle.properties</value> -->
-				<!-- <value>classpath:/properties/hsql.properties</value> -->
 			</list>
 		</property>
 	</bean>

@@ -28,6 +28,7 @@
 								<c:param name="save_file_name" value="${boardVO.save_file_names[idx]}" />
 								<c:param name="real_file_name" value="${boardVO.real_file_names[idx]}" />
 							</c:url>
+							<!-- 위처럼 c:url로 쿼리스트링을 처리하면 한글이 인코딩되어서 전송됨(한글 안깨짐) -->
 							<a href="${url}">다운로드
 							${boardVO.real_file_names[idx]}<br>
 							</a>
@@ -36,7 +37,7 @@
 							<c:set var="extName" value="${fileNameArray[fn:length(fileNameArray)-1]}" />
 							<c:choose>
 								<c:when test="${fn:containsIgnoreCase(checkImgArray,extName)}">
-									<img alt="다운로드이미지" style="width:100%;display:block;" src="/image_preview?save_file_name=${boardVO.save_file_names[idx]}">
+									<img alt="다운로드이미지" style="max-width:100%;display:block;" src="/image_preview?save_file_name=${boardVO.save_file_names[idx]}">
 								</c:when>
 							</c:choose>							
 						</c:if> 
@@ -54,7 +55,7 @@
 			</form>
 			<script>
 			$(document).ready(function(){
-				var form = ${"#hide_form"};
+				var form = $("#hide_form");
 				$("#btn_delete").click(function(){
 					if(confirm("정말로 삭제하시겠습니까?")){
 						form.attr("action","/home/board/board_delete");
@@ -62,7 +63,9 @@
 					}
 				});
 				$("#btn_update").click(function(){
-					alert("수정 준비중입니다.");
+					form.attr("action","/home/board/board_update_form");
+					form.attr("method","get");
+					form.submit();
 				});
 			});
 			</script>
