@@ -29,8 +29,53 @@
 ============ 2주간 작업내역 끝(07.16 금) ==============
 - 헤로쿠 클라우드에 배포할때, 매퍼 폴더의 mysql폴더 내의 쿼리에 now()를 date_add(now(3), interval 9 HOUR)로 변경예정(이유는 DB서버의 타임존이 한국이 아니라 출력되는 시간이 다름)
 
-#### 20210709(금) 작업예정
+#### 20210709(금) 작업
 - 게시물 수정/삭제 시 본인이 아닐경우 접근 못하게 하는 메서드를 공통으로 구현예정
+
+```
+@Around("execution(* com.edu.controller.HomeController.board_delete(..)) || execution(* com.edu.controller.HomeController.board_update*(..))")
+    public Object board_deleteMethod(ProceedingJoinPoint pjp) throws Throwable {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		if(request != null) {//jsp에서 Get,Post 있을때,
+			BoardVO boardVO = null;
+			String user_id = null;
+			Integer bno = null;
+			logger.info("디버그 메서드네임 가져오기 : " + pjp.getSignature().getName());//기술참조 https://alwayspr.tistory.com/34
+			for(Object object:pjp.getArgs()) {
+				if(object instanceof Integer) {//AOP실행메서드중 매개변수 판단
+					//파마미터가 bno일때 게시판의 writer를 가져오기
+					bno = (Integer) object;
+					boardVO = boardService.readBoard(bno);//아래 조건때문에 추가
+					user_id = boardVO.getWriter();
+				}
+				if(object instanceof BoardVO) {
+					//파라미터가 BoardVO 클래스객체 일때 writer를 가져오기
+					boardVO = (BoardVO) object;
+					user_id = boardVO.getWriter();
+				}
+			}
+			HttpSession session = request.getSession();//클라이언트PC에서 스프링프로젝트 접근시 세션객체
+			if( !user_id.equals(session.getAttribute("session_userid")) && "ROLE_USER".equals(session.getAttribute("session_levels")) ) {
+				FlashMap flashMap = new FlashMap();
+				flashMap.put("msgError", "게시물은 본인글만 수정/삭제 가능합니다.");
+				FlashMapManager flashMapManager = RequestContextUtils.getFlashMapManager(request);
+				flashMapManager.saveOutputFlashMap(flashMap, request, null);
+				String referer = request.getHeader("Referer");//크롬>네트워크>파일>Referer>이전페이지 URL이 존재
+				return "redirect:"+referer;
+			}
+		}
+		Object result = pjp.proceed();//여기서 조인포인트가 실행됩니다.
+		return result;
+	}
+```
+- 사용자단 댓글서비스 작업예정
+- Ajax소스는 프로그램이기 때문에, 디자인과 크게 관련없기 때문에, admin단 board_View에 있는 Ajax를 가져다 사용($.Ajax에서 complete, beforeSend, async 속성들)
+- ajax에서 디버그하는 방법
+- 사용자단 메인페이지(대시보드) 작업
+- 헤로쿠 30분 지나서 휴면모드로 들어가기전, 잠깨우는 기능 추가예정(스프링스케줄러 사용)
+- 순서1 : 외부 모듈 라이브러리 추가(pom.xml에서) -> 메이븐업데이트
+- 순서2 : 스케줄링할 메서드 생성(herokuJobMethod) -> root-context에서 스케줄링 스프링빈 생성
+- 
 
 #### 20210708(목) 작업
 - properties 파일 hsql, cloud를 cloud로 통일
@@ -43,8 +88,6 @@
 - JsonView 방식 사용방법 
 - 1. servlet 설정에 스프링빈을 등록(클래스는 스프링프레임워크에 내장, pom.xml외부 라이브러리 모듈을 가져올 필요 없음)
 - 사용자단에서는 글쓴 본인만 삭제/수정 가능하게 기능추가(관리자단에서 admin은 전부 가능)
-- 사용자단 메인페이지(대시보드) 작업예정.
-- 헤로쿠 30분 지나서 휴면모드로 들어가기전, 잠깨우는 기능 추가예정(스프링스케줄러 사용)
 
 #### 20210707(수) 작업
 - 사용자단 게시물관리 CRUD작업
