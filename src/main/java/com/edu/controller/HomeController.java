@@ -311,17 +311,41 @@ public class HomeController {
 		return "home/member/mypage";
 	}
 	//사용자단 로그인 URL 폼호출 GET, 로그인 POST처리는 컨트롤러로 하지 않고 스프링시큐리티로 처리
-	@RequestMapping(value = "/login_form", method = RequestMethod.GET)
-	public String login() throws Exception {
-		
-		return "home/login"; //.jsp생략
-	}
+	//네아로 로그인때문에 LoginController클래스로 분리해서 사용. 아래내용 주석처리
+	/*
+	 * @RequestMapping(value = "/login_form", method = RequestMethod.GET) public
+	 * String login() throws Exception {
+	 * 
+	 * return "home/login"; //.jsp생략 }
+	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model) { //콜백메소드,자동실행됨
-		String jspVar = "@서비스(DB)에서 처리한 결과";
-		model.addAttribute("jspObject", jspVar); 
-		logger.info("디버그 스프링로고사용: " + jspVar);//System.out 대신에 logger 객체로 디버그함
+	public String home(Model model) throws Exception { //콜백메소드,자동실행됨
+		/*
+		 * String jspVar = "@서비스(DB)에서 처리한 결과"; model.addAttribute("jspObject", jspVar);
+		 * logger.info("디버그 스프링로고사용: " + jspVar);//System.out 대신에 logger 객체로 디버그함
+		 */		
 		// home.jsp파일로 자료를 전송하는 기능 = model 인터페이스 객체(스프링이 처리)에 내용만 채우면 된다.
+		PageVO pageVO = new PageVO();
+		pageVO.setPage(1); //필수값1				
+		pageVO.setQueryPerPageNum(3); //갤러리는 3개, 공지사항은 5개	
+		pageVO.setBoard_type("gallery");
+		//첨부파일 save_file_names 배열변수값을 지정
+		List<BoardVO> latestGallery = boardService.selectBoard(pageVO);
+		
+		for(BoardVO boardVO:latestGallery) {//리스트형 객체를 하나씩 뽑아서 한개의 레코드에 입력반복
+			List<AttachVO> listAttachVO = boardService.readAttach(boardVO.getBno());
+			if(listAttachVO.size() > 0) {
+				String[] save_file_names = new String[listAttachVO.size()];
+				save_file_names[0] = listAttachVO.get(0).getSave_file_name();
+				boardVO.setSave_file_names(save_file_names);
+			}
+		}		
+		model.addAttribute("latestGallery", latestGallery);//갤러리 최근게시물
+		
+		pageVO.setQueryPerPageNum(5); // 공지사항 5개, board_type은 세션으로 처리하기 때문에 필요없음
+		pageVO.setBoard_type("notice");
+		model.addAttribute("latestNotice", boardService.selectBoard(pageVO)); //공지사항 최근게시물
+				
 		return "home/index"; //확장자가 생략 .jsp가 생략되어 있음.
 	}
 	
