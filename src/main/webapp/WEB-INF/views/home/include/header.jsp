@@ -72,7 +72,9 @@ if("${msgError}" != "") {
 						<!-- 로그인 후 보이는 메뉴(아래) -->
 						<li><a href="#">${session_username}님 환영합니다.</a></li>
 						<li><a href="/logout">로그아웃</a></li>
-						<li><a href="/member/mypage_form">마이페이지</a></li>
+						<c:if test="${session_login_type ne 'sns'}">
+							<li><a href="/member/mypage_form">마이페이지</a></li>
+						</c:if>						
 						<!-- ROLE_ADMIN(권한이 관리자)만 AdminLTE가 보여지게 조건 추가 -->
 						<c:if test="${session_levels eq 'ROLE_ADMIN'}">
 							<li><a href="/admin">AdminLTE</a></li>

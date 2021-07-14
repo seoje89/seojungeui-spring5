@@ -74,7 +74,7 @@ public class AspectAdvice {
 		if(request != null) {
 			HttpSession session = request.getSession();
 			//위 메서드의 매개변수를 이용해서 생성된 user_id와 세션 user_id를 비교 + ROLE_USER일때만 비교하는 조건 추가
-			if(!user_id.equals(session.getAttribute("session_user_id")) && "ROLE_USER".equals(session.getAttribute("session_levels"))) {
+			if(!user_id.equals(session.getAttribute("session_userid")) && "ROLE_USER".equals(session.getAttribute("session_levels"))) {
 				//메세지를 redirect로 .addFlash~로 변수명을 지정해서 보냈음.
 				//위 redirectAttributes를 사용하는 대신 Flash(휘발성객체 : 1회 사용후 내용 없어짐) 클래스 사용
 				FlashMap flashMap = new FlashMap();

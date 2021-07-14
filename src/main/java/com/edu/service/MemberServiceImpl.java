@@ -35,7 +35,7 @@ public class MemberServiceImpl implements IF_MemberService {
 		URL url = new URL(urlStr);
 		HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection(); //접속 객체만들기
 		urlConnection.setUseCaches(false);//접속시 캐시사용없이 무조건 새로고침하겠다고 명시, 컨테이너가 계속 올라가있음(자료유지)
-		urlConnection.setReadTimeout(10000);//접속대기시간을 10초로 제한
+		urlConnection.setReadTimeout(60000);//접속대기시간을 60초로 제한
 		//20분마다 접속이 되는지 개발자가 확인하는 코드
 		if(urlConnection !=null && urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			logger.info("헤로쿠 앱이 활성화 상태입니다.");
