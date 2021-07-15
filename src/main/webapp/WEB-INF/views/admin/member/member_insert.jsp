@@ -39,6 +39,17 @@
             <div class="card-body">
             
               <div class="form-group">
+              	<!-- 사용자 프로필 이미지 등록 태그 추가 -->
+              	<div class="form-group">
+                	<label for="exampleInputFile">사용자프로필</label>
+                	<div class="input-group">
+                  		<div class="custom-file">
+		                    <input name="file" type="file" class="custom-file-input" id="file0">
+		                    <label class="custom-file-label" for="file0">파일선택</label>
+                 		</div>
+                    </div>
+                
+              	</div>
               	<!-- 신규등록시 ID중복체크 필수 : 버튼이벤트 처리 -->
                 <label for="user_id">사용자ID
                 <button id="btn_id_check" type="button" class="btn btn-sm btn-secondary">중복체크</button>
@@ -96,6 +107,15 @@
   <!-- /.content-wrapper -->
 
 <%@ include file="../include/footer.jsp" %>
+<!-- 첨부파일 input태그 디자인 안쪽에 집어넣는 확장프로그램 -->
+<script src="/resources/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+
+<!-- 위 첨부파일 확장프로그램 실행(개발자가 처리) -->
+<script>
+	$(document).ready(function(){
+		bsCustomFileInput.init();
+	});
+</script>
 <!-- 관리자단은 jQuery 코어가 하단 footer에 있기 때문에 푸터보다 아래에 위치 -->
 <script>
 $(document).ready(function() {
