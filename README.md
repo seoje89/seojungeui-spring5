@@ -83,6 +83,8 @@
 #### 20210715(목) 작업
 - 문서작업(제출용) 예정
 - 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리예정.
+- C:\egov\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\seojungeui-spring5\resources\profile
+- URL로 접근할때는 http://localhost:8080/resources/profile/admin22
 - jsp템플릿인 tiles(타일즈) 사용.
 
 #### 20210714(수) 작업

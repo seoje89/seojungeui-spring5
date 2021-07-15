@@ -36,19 +36,17 @@
           <!-- form start -->
           <!-- 첨부파일을 전송할때는 enctype 필수, 없으면 첨부파일 전송x -->
           <form name="form_write" action="/admin/member/member_insert" method="POST" enctype="multipart/form-data">
-            <div class="card-body">
-            
+            <div class="card-body">              
               <div class="form-group">
-              	<!-- 사용자 프로필 이미지 등록 태그 추가 -->
+                <!-- 사용자 프로필 이미지 등록 태그 추가 -->
               	<div class="form-group">
                 	<label for="exampleInputFile">사용자프로필</label>
                 	<div class="input-group">
                   		<div class="custom-file">
-		                    <input name="file" type="file" class="custom-file-input" id="file0">
-		                    <label class="custom-file-label" for="file0">파일선택</label>
+		                    <input accept=".jpg" name="file" type="file" class="custom-file-input" id="file0">
+		                    <label class="custom-file-label" for="file0">파일선택(jpg만 가능)</label>
                  		</div>
-                    </div>
-                
+                    </div>                
               	</div>
               	<!-- 신규등록시 ID중복체크 필수 : 버튼이벤트 처리 -->
                 <label for="user_id">사용자ID

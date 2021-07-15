@@ -38,6 +38,10 @@
           <form id="form_view" name="form_view" action="/admin/member/member_update_form" method="GET" enctype="multipart/form-data">
             <div class="card-body">
               <div class="form-group">
+              	<label for="exampleInputEmail1">프로필 사진</label><br>
+              	<img style="border-radius:70%;width:150px;height:150px;" onerror="this.src='/resources/admin/dist/img/default-150x150.png'" src="/resources/profile/${memberVO.user_id}.jpg">
+              </div>
+              <div class="form-group">
                 <label for="exampleInputEmail1">사용자ID</label>
                 <br>
                 <c:out value="${memberVO.user_id}" /> 
