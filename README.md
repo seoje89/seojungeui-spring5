@@ -39,12 +39,55 @@
 - 위 3가지 구조는 비슷하기 때문에 1가지만 아셔도 다른 jsp템플릿 적용시 응용가능합니다.
 - 알고리즘 다이어그램기반으로 자바코딩테스트예정(깃 it강의저장소자료이용).
 
-#### 20210714(수) 작업
-- 네이버 아이디 로그인 작업마무리
-- 요청 URL생성 -> 인증체크(네이버로그인컨트롤러 메서드추가) -> 성공시 callback URL로 이동해서 처리하는 메서드 생성
+#### 데이터의 이동
+- VO클래스의 이동 : 매퍼쿼리 <-> DAO(M) <-> Service <-> Controller(C) <-> jsp(V)
+
+#### 변수값(데이터) ReplyVO 데이터 클래스를 기준으로
+- JSON데이터 : 크롬에서 부메랑으로 List<ReplyVO> 형태의 데이터 확인
+- JSON데이터 구조 : ArrayList(표) + HashMap(key:value)
+
+```
+{
+    "rno": 4,
+    "reply_text": "부메랑 댓글 입력테스트",
+    "replyer": "admin",
+    "reg_date": 1626311012555,
+    "update_date": 1626311012555,
+    "bno": 2
+},
+{
+    "rno": 3,
+    "reply_text": "부메랑 댓글 입력테스트",
+    "replyer": "admin",
+    "reg_date": 1626310997344,
+    "update_date": 1626310997344,
+    "bno": 2
+},
+{
+    "rno": 2,
+    "reply_text": "1111",
+    "replyer": "admin",
+    "reg_date": 1626309730857,
+    "update_date": 1626309730857,
+    "bno": 2
+}
+```
+
+- ArrayList 클래스형 데이터 : List<ReplyVO> replyList = new ArrayList(); //DB쿼리결과
+- 위 ArrayList 구조 : List(인터페이스) > ArrayList(임플리먼트 클래스)
+
+- HashMap 클래스형 데이터 : Map<String, Object> mapData = new HashMap<String, Object>();
+- 위 HashMap 구조 : Map(인터페이스- 메서드명) > HashMap(구현클래스)
+- Hash 해시태그 : 그물망(해시) = # = 좌표(x,y) = (key:value)
+
+#### 20210715(목) 작업
 - 문서작업(제출용) 예정
 - 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리예정.
 - jsp템플릿인 tiles(타일즈) 사용.
+
+#### 20210714(수) 작업
+- 네이버 아이디 로그인 작업마무리
+- 요청 URL생성 -> 인증체크(네이버로그인컨트롤러 메서드추가) -> 성공시 callback URL로 이동해서 처리하는 메서드 생성
 
 #### 20210713(화) 작업
 - 사용자단 메인페이지(대시보드) 작업
