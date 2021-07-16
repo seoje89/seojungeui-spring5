@@ -346,7 +346,8 @@ public class HomeController {
 		pageVO.setBoard_type("notice");
 		model.addAttribute("latestNotice", boardService.selectBoard(pageVO)); //공지사항 최근게시물
 				
-		return "home/index"; //확장자가 생략 .jsp가 생략되어 있음.
+		//return "home/index"; // 타일즈 적용 전
+		return "index.tiles"; //타일즈 적용 후 tiles 폴더 안 index.jsp 호출
 	}
 	
 }
