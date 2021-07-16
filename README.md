@@ -80,12 +80,17 @@
 - 위 HashMap 구조 : Map(인터페이스- 메서드명) > HashMap(구현클래스)
 - Hash 해시태그 : 그물망(해시) = # = 좌표(x,y) = (key:value)
 
+#### 20210716(금) 작업
+- 수업전 헤로쿠에 배포 후 어제 작업한 결과 확인
+- jsp템플릿인 tiles(타일즈) 사용.
+- 알고리즘 다이어그램기반으로 자바코딩테스트예정(깃 it강의저장소자료이용).
+
 #### 20210715(목) 작업
 - 문서작업(제출용) 예정
 - 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리예정.
 - C:\egov\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\seojungeui-spring5\resources\profile
 - URL로 접근할때는 http://localhost:8080/resources/profile/admin22
-- jsp템플릿인 tiles(타일즈) 사용.
+
 
 #### 20210714(수) 작업
 - 네이버 아이디 로그인 작업마무리
