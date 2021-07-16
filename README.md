@@ -23,9 +23,9 @@
 - 사용자단 댓글 CRUD 처리.
 - 헤로쿠 클라우드에 배포(9.클라우드 배포 CI/CD 구현).깃(최신소스)-연동-헤로쿠(배포)
 - 문서작업(제출용)
-- [실습시간이 가능하다면: 관리자 대시보드에서 회원ID 이미지업로드 및 보이기 처리]
+- 관리자 대시보드에서 회원ID 이미지업로드 및 보이기 처리
 - [실습시간이 가능하다면: 알고리즘 다이어그램 기반으로 자바 코딩 테스트]
-- [실습시간이 가능하다면: 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현).]
+- 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현)
 ============ 2주간 작업내역 끝(07.16 금) ==============
 - 헤로쿠 클라우드에 배포할때, 매퍼 폴더의 mysql폴더 내의 쿼리에 now()를 date_add(now(3), interval 9 HOUR)로 변경예정(이유는 DB서버의 타임존이 한국이 아니라 출력되는 시간이 다름)
 
@@ -80,6 +80,9 @@
 - 위 HashMap 구조 : Map(인터페이스- 메서드명) > HashMap(구현클래스)
 - Hash 해시태그 : 그물망(해시) = # = 좌표(x,y) = (key:value)
 
+#### 20210719(월) 작업예정
+- 알고리즘 다이어그램기반으로 자바코딩테스트예정(깃 it강의저장소자료이용)
+
 #### 20210716(금) 작업
 - 수업전 헤로쿠에 배포 후 어제 작업한 결과 확인
 - jsp템플릿인 tiles(타일즈) 사용.
@@ -94,6 +97,53 @@
 - 6. 기존 home/index.jsp 파일 그대로 복사해서 tiles/index.jsp로 복사해서 @include 삭제만 처리 
 - 7. HomeController 에서 기존 @RequestMapping 복사해서 타일즈용으로 추가
 - 알고리즘 다이어그램기반으로 자바코딩테스트예정(깃 it강의저장소자료이용).
+- 코딩테스트 3가지
+- 1.dev구름처럼 온라인 코딩테스트(디버그)
+- 2.회사에서 pc제공해서 pc의 이클립스에서 코딩테스트(디버그)
+- 3.회사에서 종이에 코딩테스트 : 수두코딩(Pseudo-code)으로 로직만 검사하는 시험(디버그x)
+- 문제를 분석 -> 다이어그램 만들기 -> 자바코딩 테스트
+- 10개 다이어그램 -> 자바코딩 테스트
+
+```
+import java.io.BufferedReader; // 키보드 입력떄문에 팔요
+import java.io.InputStreamReader; // 키보드 입력때문에 필요
+import java.util.Arrays; // 오름차순 정렬때문에 필요
+class Main {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N;
+		int[] questions;
+		N = Integer.parseInt(br.readLine()); // 키보드로 입력받는 커서 생성
+		//System.out.println("키보드로 입력한 값은 " + N);
+		questions = new int[N]; //키보드로 입력한 값 N으로 난이도배열의 크기를 지정함
+		String str = br.readLine(); //키보드 입력받는 커서가 나옴. 단, 숫자사이에 공백을 집어넣음
+		//문자열로 입력 받은 문자를 questions 정수형배열변수에 하나씩 입력
+		String[] strArray = str.split(" ");
+		for(int i=0;i<N;i++) {
+			questions[i] = Integer.parseInt(strArray[i]);
+		}
+		//System.out.println("난이도 입력값 " + Arrays.toString(questions));
+		Arrays.sort(questions); //입력받은 questions 배열을 오름차순으로 정렬
+		int count = 0;
+		int before = questions[0];
+		//int current = 0;
+		for(int current:questions){
+			if(before != current) {
+				count = count +1;
+			}
+			if(count == 2) {
+				break;
+			}
+			before = current;
+		}
+		if(count >= 2) {
+			System.out.println("Yes");
+		} else {
+			System.out.println("No");
+		}
+	}
+}
+```
 
 #### 20210715(목) 작업
 - 문서작업(제출용) 예정
