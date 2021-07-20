@@ -82,11 +82,399 @@
 
 #### 20210720(화) 작업예정
 - 코딩테스트 10번 마무리
-- 코딩테스트 9번부터 시작 8,7,6까지 마무리
+- 코딩테스트 9번부터 시작 재귀함수(recursive)
+- 재귀함수란? 메서드 안에서 자기자신을 호출하는 함수.(6번코딩테스트로 실습확인)
+- 코딩테스트 8,7까지 마무리
 - 8교시 UI구현 과제물 제출전 7교시에 확인예정
 
+- 코딩실습09. 소스(아래)
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+	static String endString = "";
+	static String w,r;
+	
+	public static int getBalancedIndex(String w) {
+		int index = 0;
+		int balanceCount = 0;
+		for(int i=0;i<w.length();i++) {
+			String tmpChar = w.substring(i,i+1);//입력한 문자열에서 1개의 문자를 뽑아내는 명령
+			if("(".equals(tmpChar)) {
+				balanceCount++;
+			}else if(")".equals(tmpChar)){
+				balanceCount--;
+			}
+			if(balanceCount==0) {
+				index = i;//반복한 횟수
+				break;//for문을 중지하고 index가지고, 다음으로 진행
+			}
+		}
+		return index;
+	}
+	
+	public static boolean isValidString(String u) {
+		int balanceCount = 0;
+		for(int i=0;i<u.length();i++) {
+			String tmpChar = u.substring(i, i+1);
+			if("(".equals(tmpChar)) {
+				balanceCount++;
+			}else if(")".equals(tmpChar)) {
+				balanceCount--;
+			}
+			if(balanceCount < 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static String reArrange(String u) {
+		String arrangeString = "";
+		for(int i=1;i<u.length()-1;i++) {
+			String tmpChar = u.substring(i,i+1);//1글자만 뽑는 명령
+			if("(".equals(tmpChar)) {
+				arrangeString += ")";
+			}else if(")".equals(tmpChar)){
+				arrangeString += "(";
+			}
+		}
+		return arrangeString;
+	}
+	
+	public static String recursive(String w) {
+		if(w.isEmpty()) {
+			return w + endString;
+		}
+		int balancedIndex = getBalancedIndex(w);
+		String u = w.substring(0, balancedIndex+1);//짝이 맞춰진 문자열.
+		String v = w.substring(balancedIndex+1);//짝이 맞지 않는 나머지 문자열.
+		boolean isValidCheck = isValidString(u);
+		System.out.println(isValidCheck);
+		if(isValidCheck==true) {
+			if("(".equals(u)) {
+				endString += ")";//endString = endString + ")"
+			}
+			u += recursive(v);//u = u+recursive(v); 1회전 u , 2회전 u=v
+			return u;			
+		}else{
+			String createString = "(";
+			createString += recursive(v);
+			createString += ")";
+			createString += reArrange(u);
+			return createString;
+		}
+	}
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		w = sc.nextLine();
+		r = recursive(w);
+		if(w.equals(r)) {
+			System.out.println("올바른 괄호 문자열 입니다." + r);
+		}else{
+			System.out.println("잘못된 괄호 문자열 입니다. 입력값은 "+w+"수정값은 "+r);
+		}
+	}
+}
+```
+- 작업하는 소스코드 예를 드면, $(document).ready(function(){}));
+- 위 경우처럼 소스에서 짝이 맞지 않는 ()기호 있으면 찾아서 짝이 맞게 고치는 솔루션 만들기
+
+- 코딩실습06. 6번코딩테스트소스(아래)
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+	static long Factorial = 1;//멤버변수(클래스영역의변수)
+	public static long fact(int n) {
+		//예, 5! = 5x4x3x2
+		if(n==1) {
+			return Factorial;
+		}
+		Factorial = Factorial * n;
+		System.out.println(n + "재귀함수가 반복하는 부분 값 " + Factorial);
+		n = n - 1;     //fact(n) : 5 -> 4 -> 3 -> 2 -> 1
+		return fact(n);//재귀함수 만드는 방식 -> 중복 for반복문을 대체하게 됨.
+	}
+	public static void main(String[] args) {
+		int n;//N팩토리얼 에서 n을 구하는 변수
+		long Result;
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();//sc객체를 이용해서 n값을 입력 받습니다.
+		Result = fact(n);//fact 매개변수로 n을 받아서 결과를 리턴 받습니다.
+		System.out.println(n + "팩토리얼의 값은 " + Result);
+	}
+}
+```
+
+- 코딩실습 07번 소스(아래)
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+	public static void main(String[] args) {
+		int n;
+		int[] Score;
+		int[] Rank;
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();
+		Score = new int[n];
+		Rank = new int[n];
+		for(int i=0;i<n;i++) {
+			Score[i] = sc.nextInt();
+		}
+		System.out.println("입력한 점수배열은 " + Arrays.toString(Score));
+		for(int i=0;i<n;i++) {
+			for(int comp=0;comp<n;comp++) {
+				if(Score[i] < Score[comp]) {//내부 for문에서 Score[i]기준값 , Score[comp]비교값 반복시 변화됨.
+					Rank[i] = Rank[i] + 1;//기준값과 비교해서 본인값이 낮으면 랭크를 올립니다. 기준값의 등수가 낮아짐.
+				}
+			}
+			//Rank[i] = Rank[i] + 1;//인덱스가 0부터 시작해서 이코드를 추가하면, 1등부터 시작합니다.
+		}
+		for(int i=0;i<n;i++) {
+			System.out.println(i+" 번째 학생의 점수는 "+Score[i]+" 등수는 "+(Rank[i]+1));
+		}
+	}
+}
+```
+
+- 코딩실습 08번 소스(아래)
+- 위 입력예) 좋아하는 색상을 선택하세요, 1:빨강, 2:노랑, 3:녹색
+- { 1, 1, 2, 3, 4, 1, 2, 3, 4, ...} 최다선택한 색상을 구하는 로직입니다.
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+	//스태틱 클래스,메서드,변수 : 객체로 생성을 하지 않아도 실행이 되는 메모리영역에 있다.
+	public static void main(String[] args) {
+		int n, Top=0, Max=0, MaxCnt=0;
+		int[] VoteIndex, VoteCnt;
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();
+		VoteIndex = new int[n];
+		for(int i=0;i<n;i++) {
+			VoteIndex[i] = sc.nextInt();
+			if(VoteIndex[i] > Max) { //최고값을 구하는 간단한 로직
+				Max = VoteIndex[i];
+			}
+		}//키보드로 입력한 값중 제일 큰 값이 Max변수 남게됩니다.
+		VoteCnt = new int[Max+1];//투표한 값을 인덱스로 사용한 변수 생성(Max+1는 Out Of Bound 에러를 방지하기 위해서)
+		for(int i=0;i<n;i++) {
+			VoteCnt[VoteIndex[i]] = VoteCnt[VoteIndex[i]] + 1;//여기서 투표한 횟수가 누적이 됩니다.
+			System.out.println("VoteIndex[" + VoteIndex[i] + "]일때 해당 VoteCnt["+VoteIndex[i]+"]누적 값은 " + VoteCnt[VoteIndex[i]]);
+		}
+		for(int i=0; i<Max+1; i++) { //MaxCnt, Top 구하는 for문 로직
+			if(VoteCnt[i] > MaxCnt) {
+				MaxCnt = VoteCnt[i]; //최다 선택한 값의 개수
+				Top = i; //최다 선택한 값
+			}
+		}
+		System.out.println("최다 선택값 : " + Top + " 선택한 횟수는 " + MaxCnt);
+	}
+}
+```
+
 #### 20210719(월) 작업
+- 코딩실습10. 로또번호가 올바른 번호인지 확인하는 코드작성 코딩테스트 10번소스(아래) 작업
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+    public static boolean isValid(int[] Lotto, int n) {
+        //조건 1, 2, 3 구현하는 코딩이 입력(아래)
+        if(n != 6) {//조건1중 일부
+            return false;//현재 isValid메서드가 종료되면서, false를 반환 합니다.
+        }
+        //조건1, 연속된 숫자가 중복되는지 검사로직
+        for(int i=0;i<(n-1);i++) {
+            if(Lotto[i] == Lotto[i+1]) {
+                return false;//중복숫자기 있으면, 현재 isValid메서드를 종료 하고, false를 반환합니다. 
+            }
+        }
+        //조건2, 숫자범위는 1부터 45까지의 숫자만 인정이 됨
+        for(int i=0;i<n;i++) {
+					if(Lotto[i] < 1 || Lotto[i] > 45) {
+						return false;
+					}
+				}
+        //조건3, 현재 로또번호가 오름차순 정렬로 되었는지 확인하는 로직
+        //앞수 뒤수 비교해서 앞수가 크면, 오름차순에 위배되기 때문에 false
+				for(int i=0;i<n-1;i++) {
+					if(Lotto[i] > Lotto[i+1]) {
+						return false;//현재 메서드를 종료하면서 return으로 false를 반환함.
+					}
+				}
+        return true;
+    }
+    public static void main(String[] args) {
+        int n;//6개의 로또번호 입력받을 크기
+        int[] Lotto;//배열의 크기가 필요
+        boolean Real;//진짜 로또번호인지 확인결과 참/거짓
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        Lotto = new int[n];
+        for(int i=0;i<n;i++) {
+            Lotto[i] = sc.nextInt();
+        }
+        System.out.println("주운 로또 번호는 "+Arrays.toString(Lotto));
+        Real = isValid(Lotto, n);
+        if(Real == true) {
+            System.out.println("주운 로또번호는 진짜 입니다.");
+        }else{
+            System.out.println("주운 로또번호는 가짜 입니다.");
+        }
+    }	
+}
+```
+
+- 10진수를 2진수로 변환 코딩테스트05소스(아래)
+- 13 = 1101(2)
+- 13 = 10의 자리 1, 1의 자리 3
+- 1101 = 8421(자리수)코드 = 2(3)자리수 1, 2(2)자리는 1, 2(1)자리는 0, 2(0)자리는 1
+- 모든수의 0승(제곱) = 1
+
+-코딩실습05. 소스(아래)
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+	public static void main(String[] args) {
+		int[] Bin = new int[10];//배열 크기가 10인 정수형 배열변수 생성.
+		int Dec;//키보드로 입력받을 십진수 저장공간
+		int idx = 0;//반복문에 사용할 변수선언
+		int Mok, Nmg;//몫과 나머지로 변수로 사용.
+		Scanner sc = new Scanner(System.in);
+		Dec = sc.nextInt();
+		while(true) {
+			Mok = (int) Dec/2;
+			Nmg = Dec - (Mok*2);//나머지를 구하는 공식
+			Bin[idx] = Nmg;
+			idx = idx + 1;//idx++
+			if(Mok==0) {
+				break;
+			}else{
+				Dec = Mok;
+			}
+		}//반복문 끝
+		//역순 출력에 대한 로직 1101 -> 1011역순으로 출력
+		for(int i=idx-1;i>=0;i--) {
+			System.out.print(Bin[i] + " ");
+		}
+	}
+}
+```
+
+---------------------------------------
+- 코딩실습04 삽입정렬 코딩테스트04소스(아래).오름차순에서 10번 반복 결과가 나옴.
+---------------------------------------
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+	public static void main(String[] args) {
+		int n;
+		int[] Numbers;
+		int insert, comp, Key;
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();
+		Numbers = new int[n];
+		for(int i=0;i<n;i++) {
+			Numbers[i] = sc.nextInt();
+		}
+		//System.out.println("키보드로 입력받은 배열의 값은 " + Arrays.toString(Numbers));
+		for(insert=1;insert<n;insert++) {
+			Key = Numbers[insert];//인덱스1의 값 4를 삽입
+			for(comp=insert-1;comp>=0;comp--) {
+				if(Numbers[comp] > Key) {//5와 4를 비교
+					Numbers[comp+1] = Numbers[comp];//인덱스1의 자리에 5를 삽입
+				}else{
+					break;//내부for 빠져나감
+				}
+				//if(insert < 3) {
+					System.out.println("내부 for문 "+comp+" 회전일때 Numbers값은 "+ Arrays.toString(Numbers));
+				//}
+			}
+			//System.out.println("comp 값은 " + comp);
+			Numbers[comp+1] = Key;//인덱스0의 자리에 4를 입력
+			//if(insert < 3) {
+			//	System.out.println("외부 for문 키값은 "+Key+" Numbers값은 "+ Arrays.toString(Numbers));
+			//}
+		}
+		for(int i=0;i<n;i++) {
+			System.out.print(Numbers[i] + " ");
+		}
+	}	
+}
+```
+
+------------------------------------------
+- 버블정렬 코딩테스트03소스(아래).오름차순에서 20번 만에 결과가 나옴.
+------------------------------------------
+- 특징1: 선택정렬과는 반대로 제일 큰 값이 오른쪽에 배치되면서 1회전이 종료
+- 참고) 선택정렬은 제일 작은 값이 왼쪽에 배치되면서 1회전이 종료
+- 특징2: 비교할때 선택정렬은 비교할 기준자리가 있으나, 버블정렬은 바로 옆의 값을 비교하는 방식(거품방식)
+- 코딩실습03. 소스(아래)
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+	public static void main(String[] args) {
+		int n;
+		int[] Numbers;
+		int bubble, idx, Temp;
+		Scanner sc = new Scanner(System.in);//키보드로 입력 스캐너객체 생성
+		n = sc.nextInt();
+		Numbers = new int[n];//배열의 크기 지정
+		for(int i=0;i<n;i++) {
+			Numbers[i] = sc.nextInt();
+		}
+		System.out.println("입력된 배열값 확인 " + Arrays.toString(Numbers));
+		for(bubble=0;bubble<n;bubble++) {
+			for(idx=0;idx<n-1;idx++) {
+				if(Numbers[idx] > Numbers[idx+1]) {
+					Temp = Numbers[idx];
+					Numbers[idx] = Numbers[idx+1];
+					Numbers[idx+1] = Temp;
+				}
+				if(bubble == 0) {
+					System.out.println(Arrays.toString(Numbers) + "(내부 for"+(idx+1)+"회전)");
+				}				
+			}
+		}
+		//졍렬 결과값 출력(아래)
+		for(int i=0;i<5;i++) {
+			System.out.print(Numbers[i] + " ");
+		}
+	}	
+}
+```
+
+-------------------------------------
+- 선택정렬 : 10번 반복으로 졍렬결과 나옴.
+-------------------------------------
 - Temp변수사용 정렬 코딩 테스트02소스(아래).지난주에 사용한 Arrays클래스 sort메서드구성연습
+- 예, 중복 for문에서 외부1회전(내부 for문 1회전-4회전)
+- 5, 4, 3, 2, 1(원시데이터)
+- 4, 5, 3, 2, 1(내부for1회전-1번째)
+- 3, 5, 4, 2, 1(내부for2회전-2번째)
+- 2, 5, 4, 3, 1(내부for3회전-3번째)
+- 1, 5, 4, 3, 2(내부for4회전-4번째)
+- 외부2회전 (내부 for문 2부터-4회전)
+- 1, 5, 4, 3, 2(원시데이터)
+- 1, 4, 5, 3, 2(내부for1회전-2번째)
+- 1, 3, 5, 4, 2(내부for2회전-3번째)
+- 1, 2, 5, 4, 3(내부for3회전-4번째)
+- 코딩실습02. 소스(아래)
 
 ```
 import java.util.Scanner;
